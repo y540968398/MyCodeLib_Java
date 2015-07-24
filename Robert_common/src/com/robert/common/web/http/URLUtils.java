@@ -150,7 +150,7 @@ public class URLUtils
 	 * 解析无缓存的链接地址
 	 * 
 	 * @param url
-	 *            带有规避缓存的参数地址
+	 *            带有规避缓存的参数地址，通常用于图片地址的解析。
 	 * @return String 无规避缓存参数的地址
 	 */
 	public static String parseNoCacheUrl(String url)

@@ -34,7 +34,12 @@ public class WebDownloaderLaunch
 
 		for (Map.Entry<String, Object> entry : downloadPageMap.entrySet())
 		{
-			new WebSubPageDownloader(entry.getKey(), entry.getValue().toString(), downloaderPool).downloadPage();
+			String url = entry.getValue().toString();
+			String urlName = entry.getKey();
+			WebSubPageDownloader subPageDownloader = new WebSubPageDownloader(url, urlName, url, urlName,
+			        downloaderPool);
+			// 指定当前链接的保存名称
+			subPageDownloader.downloadPage();
 		}
 
 		downloaderPool.startDealTask();

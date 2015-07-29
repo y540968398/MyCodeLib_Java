@@ -2,6 +2,7 @@ package com.robert.http.page;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
@@ -14,7 +15,7 @@ import com.robert.http.constants.WebConstants;
 import com.robert.http.httpclient.GetDownloader;
 import com.robert.http.httpclient.IHttpDownloader;
 import com.robert.http.httpclient.thread.HttpDownloadRunner;
-import com.robert.http.parse.jsoup.JsoupUtil;
+import com.robert.http.parse.jsoup.util.JsoupUtil;
 
 /**
  * 页面及资源下载器
@@ -48,11 +49,26 @@ public class WebPageDownloader
 	IThreadPoolExecutor<HttpDownloadRunner> executor;
 
 	// 业务参数
-	/** 页面名称，用于保存时创建目录及文件名称 */
-	String pageName;
-	/** 页面地址 */
+	/** 根目录页面地址:域名 或 指定的页面 */
+	String rootUrl;
+	/** 根目录页面保存名称 */
+	String rootUrlName;
+	/** 下载的页面地址 */
 	String pageUrl;
-	/** 页面保存路径 */
+	/**
+	 * 下载的页面的相对路径+下载的页面名称！ <br/>
+	 * 如果没有指定名称，取当前url与根url的相对路径 + 网页地址中的最后一部分作为当前页面名称。如果指定名称，则以下载的名称为准
+	 */
+	String pageUrlName;
+	/**
+	 * 页面保存地址
+	 * 
+	 * @description 1.根目录页面保存路径：<br/>
+	 *              配置根目录/rootUrlName.html 2.子页面保存路径：
+	 *              配置根目录/rootUrlName/pageUrlName[相对路径/子页面名称].html<br/>
+	 *              相对路径：根据 rootUrl 与 pageUrl 比对，产生相对路径<br/>
+	 *              子页面名称：如果未指定名称，则获取url中最后一部分作为文件名称
+	 */
 	String pageSavePath;
 
 	/**
@@ -64,7 +80,17 @@ public class WebPageDownloader
 	 */
 	protected void downloadDocument()
 	{
-		pageSavePath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + this.pageName + WebConstants.SURFIX_HTML;
+		if (StringUtils.isNotEmpty(pageUrlName) && !rootUrl.equals(pageUrl))
+		{
+			// 子页面
+			pageSavePath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + this.rootUrlName + this.pageUrlName
+			        + WebConstants.SURFIX_HTML;
+		}
+		else
+		{
+			// 根页面
+			pageSavePath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + this.rootUrlName + WebConstants.SURFIX_HTML;
+		}
 
 		GetDownloader getDownloader = new GetDownloader();
 		getDownloader.downPage(this.pageUrl, pageSavePath);
@@ -88,7 +114,7 @@ public class WebPageDownloader
 	{
 		// 修改资源地址到相对路径
 		List<Element> downLoadImgList = JsoupUtil.getDownloadImages(document, this.pageUrl,
-		        this.pageName + CfgUtil.get(CfgConstants.DIR_IMG_DOWNLOAD));
+		        this.rootUrl + CfgUtil.get(CfgConstants.DIR_IMG_DOWNLOAD));
 		for (Element element : downLoadImgList)
 		{
 			// 下载资源时，指定绝对路径
@@ -112,7 +138,7 @@ public class WebPageDownloader
 	{
 		// 修改资源地址到相对路径
 		List<Element> downloadCssList = JsoupUtil.getDownloadCss(document, this.pageUrl,
-		        this.pageName + CfgUtil.get(CfgConstants.DIR_CSS_DOWNLOAD));
+		        this.rootUrl + CfgUtil.get(CfgConstants.DIR_CSS_DOWNLOAD));
 		for (Element element : downloadCssList)
 		{
 			// 下载资源时，指定绝对路径
@@ -134,7 +160,7 @@ public class WebPageDownloader
 	{
 		// 修改资源地址到相对路径
 		List<Element> downloadJsList = JsoupUtil.getDownloadJS(document, this.pageUrl,
-		        this.pageName + CfgUtil.get(CfgConstants.DIR_JS_DOWNLOAD));
+		        this.rootUrl + CfgUtil.get(CfgConstants.DIR_JS_DOWNLOAD));
 		for (Element element : downloadJsList)
 		{
 			// 下载资源时，指定绝对路径
@@ -154,19 +180,54 @@ public class WebPageDownloader
 		this.pageDownloader = pageDownloader;
 	}
 
-	public WebPageDownloader(String pageName, String pageUrl, IThreadPoolExecutor<HttpDownloadRunner> executor)
+	/**
+	 * 页面下载器
+	 * 
+	 * @param rootUrl
+	 *            根url
+	 * @param rootUrlName
+	 *            根url页面 和 目录 名称
+	 * @param pageUrl
+	 *            当前下载url地址
+	 * @param pageUrlName
+	 *            当前下载url 相对路径 与 名称
+	 * @param executor
+	 *            资源下载线程池
+	 */
+	public WebPageDownloader(String rootUrl, String rootUrlName, String pageUrl, String pageUrlName,
+	        IThreadPoolExecutor<HttpDownloadRunner> executor)
 	{
-		this.pageName = pageName;
+		this.rootUrl = rootUrl;
+		this.rootUrlName = rootUrlName;
 		this.pageUrl = pageUrl;
+		this.pageUrlName = pageUrlName;
 		this.executor = executor;
 		this.pageDownloader = new GetDownloader();
 	}
 
-	public WebPageDownloader(String pageName, String pageUrl, IThreadPoolExecutor<HttpDownloadRunner> executor,
-	        IHttpDownloader pageDownloader)
+	/**
+	 * 页面下载器
+	 * 
+	 * @param rootUrl
+	 *            根url
+	 * @param rootUrlName
+	 *            根url页面 和 目录 名称
+	 * @param pageUrl
+	 *            当前下载url地址
+	 * @param pageUrlName
+	 *            当前下载url 相对路径 与 名称
+	 * @param executor
+	 *            资源下载线程池
+	 * @param pageDownloader
+	 *            HTTP请求下载器(POST GET)
+	 */
+	public WebPageDownloader(String rootUrl, String rootUrlName, String pageUrl, String pageUrlName,
+	        IThreadPoolExecutor<HttpDownloadRunner> executor, IHttpDownloader pageDownloader)
 	{
-		this.pageName = pageName;
+		this.rootUrl = rootUrl;
+		this.rootUrlName = rootUrlName;
 		this.pageUrl = pageUrl;
+		this.pageUrlName = pageUrlName;
 		this.executor = executor;
 		this.pageDownloader = pageDownloader;
 	}

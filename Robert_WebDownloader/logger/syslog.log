@@ -2262,3 +2262,196 @@
 2015-07-23 11:36:39 [ INFO] [  4861ms] com.robert.http.page.WebSubPageDownloader.downloadSubPage(WebSubPageDownloader.java:80) [Trd:main] : <a href="http://www.hd315.gov.cn/beian/view.asp?bianhao=010202012082400500"><img src="/images/biaoshi.gif"></a>
 2015-07-23 11:36:39 [ INFO] [  4884ms] com.robert.http.page.WebPageDownloader.savePage(WebPageDownloader.java:209) [Trd:main] : Success save document[] to F:/webDownloader/iteye_index.html
 2015-07-23 11:36:42 [ INFO] [  7885ms] com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:41) [Trd:main] : All task was done, system exit !
+2015-07-24 17:43:16 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-24 17:43:16 [ INFO] [     6ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-24 17:43:19 [ INFO] [  3027ms] com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:45) [Trd:main] : All task was done, system exit !
+2015-07-24 17:43:46 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-24 17:43:46 [ INFO] [     5ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-24 17:43:49 [ INFO] [  3019ms] com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:45) [Trd:main] : All task was done, system exit !
+2015-07-24 17:47:01 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-24 17:47:01 [ INFO] [    17ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-24 17:47:43 [ INFO] [ 42044ms] com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:45) [Trd:main] : All task was done, system exit !
+2015-07-24 17:48:01 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-24 17:48:01 [ INFO] [     5ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-24 17:48:19 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-24 17:48:19 [ INFO] [     5ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-29 17:28:14 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-29 17:28:14 [ INFO] [     5ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-29 17:28:15 [ERROR] [   349ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:71) [Trd:main] : Get request failed ! 
+java.lang.IllegalStateException: Target host must not be null, or set in parameters.
+	at org.apache.http.impl.client.DefaultRequestDirector.determineRoute(DefaultRequestDirector.java:719)
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:358)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:820)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:754)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:732)
+	at com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:65)
+	at com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:93)
+	at com.robert.http.page.WebPageDownloader.downloadPage(WebPageDownloader.java:215)
+	at com.robert.http.page.WebSubPageDownloader.downloadPage(WebSubPageDownloader.java:55)
+	at com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:41)
+2015-07-29 17:28:15 [ERROR] [   354ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:71) [Trd:main] : Get request failed ! 
+java.lang.IllegalStateException: Target host must not be null, or set in parameters.
+	at org.apache.http.impl.client.DefaultRequestDirector.determineRoute(DefaultRequestDirector.java:719)
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:358)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:820)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:754)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:732)
+	at com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:65)
+	at com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:93)
+	at com.robert.http.page.WebPageDownloader.downloadPage(WebPageDownloader.java:215)
+	at com.robert.http.page.WebSubPageDownloader.downloadPage(WebSubPageDownloader.java:55)
+	at com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:41)
+2015-07-29 17:28:15 [ERROR] [   355ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:71) [Trd:main] : Get request failed ! 
+java.lang.IllegalStateException: Target host must not be null, or set in parameters.
+	at org.apache.http.impl.client.DefaultRequestDirector.determineRoute(DefaultRequestDirector.java:719)
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:358)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:820)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:754)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:732)
+	at com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:65)
+	at com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:93)
+	at com.robert.http.page.WebPageDownloader.downloadPage(WebPageDownloader.java:215)
+	at com.robert.http.page.WebSubPageDownloader.downloadPage(WebSubPageDownloader.java:55)
+	at com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:41)
+2015-07-29 17:28:15 [ERROR] [   356ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:80) [Trd:main] : Get response null for page : iteye_index
+2015-07-29 17:28:15 [ERROR] [   356ms] com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:96) [Trd:main] : Download page error !
+2015-07-29 17:28:44 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-29 17:28:44 [ INFO] [     5ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-29 17:28:44 [ERROR] [   333ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:71) [Trd:main] : Get request failed ! 
+java.lang.IllegalStateException: Target host must not be null, or set in parameters.
+	at org.apache.http.impl.client.DefaultRequestDirector.determineRoute(DefaultRequestDirector.java:719)
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:358)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:820)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:754)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:732)
+	at com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:65)
+	at com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:93)
+	at com.robert.http.page.WebPageDownloader.downloadPage(WebPageDownloader.java:215)
+	at com.robert.http.page.WebSubPageDownloader.downloadPage(WebSubPageDownloader.java:55)
+	at com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:41)
+2015-07-29 17:28:44 [ERROR] [   337ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:71) [Trd:main] : Get request failed ! 
+java.lang.IllegalStateException: Target host must not be null, or set in parameters.
+	at org.apache.http.impl.client.DefaultRequestDirector.determineRoute(DefaultRequestDirector.java:719)
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:358)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:820)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:754)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:732)
+	at com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:65)
+	at com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:93)
+	at com.robert.http.page.WebPageDownloader.downloadPage(WebPageDownloader.java:215)
+	at com.robert.http.page.WebSubPageDownloader.downloadPage(WebSubPageDownloader.java:55)
+	at com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:41)
+2015-07-29 17:28:44 [ERROR] [   338ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:71) [Trd:main] : Get request failed ! 
+java.lang.IllegalStateException: Target host must not be null, or set in parameters.
+	at org.apache.http.impl.client.DefaultRequestDirector.determineRoute(DefaultRequestDirector.java:719)
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:358)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:820)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:754)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:732)
+	at com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:65)
+	at com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:93)
+	at com.robert.http.page.WebPageDownloader.downloadPage(WebPageDownloader.java:215)
+	at com.robert.http.page.WebSubPageDownloader.downloadPage(WebSubPageDownloader.java:55)
+	at com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:41)
+2015-07-29 17:28:44 [ERROR] [   338ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:80) [Trd:main] : Get response null for page : iteye_index
+2015-07-29 17:28:44 [ERROR] [   339ms] com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:96) [Trd:main] : Download page error !
+2015-07-29 17:29:24 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-29 17:29:24 [ INFO] [     7ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-29 17:29:24 [ERROR] [   321ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:71) [Trd:main] : Get request failed ! 
+java.lang.IllegalStateException: Target host must not be null, or set in parameters.
+	at org.apache.http.impl.client.DefaultRequestDirector.determineRoute(DefaultRequestDirector.java:719)
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:358)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:820)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:754)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:732)
+	at com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:65)
+	at com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:93)
+	at com.robert.http.page.WebPageDownloader.downloadPage(WebPageDownloader.java:215)
+	at com.robert.http.page.WebSubPageDownloader.downloadPage(WebSubPageDownloader.java:55)
+	at com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:41)
+2015-07-29 17:29:24 [ERROR] [   324ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:71) [Trd:main] : Get request failed ! 
+java.lang.IllegalStateException: Target host must not be null, or set in parameters.
+	at org.apache.http.impl.client.DefaultRequestDirector.determineRoute(DefaultRequestDirector.java:719)
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:358)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:820)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:754)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:732)
+	at com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:65)
+	at com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:93)
+	at com.robert.http.page.WebPageDownloader.downloadPage(WebPageDownloader.java:215)
+	at com.robert.http.page.WebSubPageDownloader.downloadPage(WebSubPageDownloader.java:55)
+	at com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:41)
+2015-07-29 17:29:24 [ERROR] [   325ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:71) [Trd:main] : Get request failed ! 
+java.lang.IllegalStateException: Target host must not be null, or set in parameters.
+	at org.apache.http.impl.client.DefaultRequestDirector.determineRoute(DefaultRequestDirector.java:719)
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:358)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:820)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:754)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:732)
+	at com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:65)
+	at com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:93)
+	at com.robert.http.page.WebPageDownloader.downloadPage(WebPageDownloader.java:215)
+	at com.robert.http.page.WebSubPageDownloader.downloadPage(WebSubPageDownloader.java:55)
+	at com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:41)
+2015-07-29 17:29:24 [ERROR] [   326ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:80) [Trd:main] : Get response null for page : iteye_index
+2015-07-29 17:29:24 [ERROR] [   326ms] com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:96) [Trd:main] : Download page error !
+2015-07-29 17:32:59 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-29 17:32:59 [ INFO] [     7ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-29 17:39:24 [ INFO] [     1ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-29 17:39:24 [ INFO] [     7ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-29 17:39:27 [ERROR] [  3314ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:71) [Trd:main] : Get request failed ! 
+java.lang.IllegalStateException: Target host must not be null, or set in parameters.
+	at org.apache.http.impl.client.DefaultRequestDirector.determineRoute(DefaultRequestDirector.java:719)
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:358)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:820)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:754)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:732)
+	at com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:65)
+	at com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:96)
+	at com.robert.http.page.WebPageDownloader.downloadPage(WebPageDownloader.java:238)
+	at com.robert.http.page.WebSubPageDownloader.downloadPage(WebSubPageDownloader.java:55)
+	at com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:40)
+2015-07-29 17:39:27 [ERROR] [  3320ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:71) [Trd:main] : Get request failed ! 
+java.lang.IllegalStateException: Target host must not be null, or set in parameters.
+	at org.apache.http.impl.client.DefaultRequestDirector.determineRoute(DefaultRequestDirector.java:719)
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:358)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:820)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:754)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:732)
+	at com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:65)
+	at com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:96)
+	at com.robert.http.page.WebPageDownloader.downloadPage(WebPageDownloader.java:238)
+	at com.robert.http.page.WebSubPageDownloader.downloadPage(WebSubPageDownloader.java:55)
+	at com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:40)
+2015-07-29 17:39:27 [ERROR] [  3325ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:71) [Trd:main] : Get request failed ! 
+java.lang.IllegalStateException: Target host must not be null, or set in parameters.
+	at org.apache.http.impl.client.DefaultRequestDirector.determineRoute(DefaultRequestDirector.java:719)
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:358)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:820)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:754)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:732)
+	at com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:65)
+	at com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:96)
+	at com.robert.http.page.WebPageDownloader.downloadPage(WebPageDownloader.java:238)
+	at com.robert.http.page.WebSubPageDownloader.downloadPage(WebSubPageDownloader.java:55)
+	at com.robert.http.page.launch.WebDownloaderLaunch.main(WebDownloaderLaunch.java:40)
+2015-07-29 17:39:27 [ERROR] [  3327ms] com.robert.http.httpclient.ABSDownloader.downPage(ABSDownloader.java:80) [Trd:main] : Get response null for page : 
+2015-07-29 17:39:27 [ERROR] [  3327ms] com.robert.http.page.WebPageDownloader.downloadDocument(WebPageDownloader.java:99) [Trd:main] : Download page error !
+2015-07-29 17:39:34 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-29 17:39:34 [ INFO] [     8ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-29 17:50:38 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-29 17:50:38 [ INFO] [     6ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-29 17:53:51 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-29 17:53:51 [ INFO] [     8ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-29 17:54:45 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-29 17:54:45 [ INFO] [     8ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-29 17:56:42 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-29 17:56:42 [ INFO] [     7ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-29 18:06:15 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-29 18:06:15 [ INFO] [     5ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-29 18:08:14 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-29 18:08:14 [ INFO] [     6ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-29 18:11:28 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-29 18:11:28 [ INFO] [     6ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-29 18:47:09 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-29 18:47:09 [ INFO] [     8ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !

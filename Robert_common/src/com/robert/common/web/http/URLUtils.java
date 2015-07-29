@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 
 public class URLUtils
 {
+
 	/**
 	 * 获取域名
 	 * 
@@ -64,7 +65,7 @@ public class URLUtils
 	}
 
 	/**
-	 * 获取页面子链接的规范地址，即 http://domain/.../Xxx.Xx
+	 * 获取页面子链接的规范地址，内连接，即 http://domain/.../Xxx.Xx。
 	 * 
 	 * @description 1.以 http 开头的连接地址不需要转换<br/>
 	 *              2.以 / 开头的地址需要拼接域名，因为 以 / 开头及定位到网站的根目录<br/>
@@ -82,17 +83,23 @@ public class URLUtils
 			return null;
 		}
 
-		// 以协议 或 www 开头的网址 应该是合法地址
+		// 以协议 或 www 开头的网址 应该是合法地址，也有可能是外链接(非本网站的链接)
 		if (linkUrl.startsWith("http") || linkUrl.startsWith("www"))
 		{
 			return linkUrl;
 		}
 
-		// 直接以域名开头的地址 也是合法地址
+		// 判断是否为特殊的域名(hao.360.cn)直接以域名开头的地址 也是合法地址
 		String firstPart = linkUrl.substring(0, linkUrl.indexOf("/") + 1);
 		if (firstPart.contains("."))
 		{
 			return linkUrl;
+		}
+
+		// 子连接如果是类似 url#top 锚点的，则去掉锚点
+		if (linkUrl.contains("#"))
+		{
+			linkUrl = linkUrl.substring(0, linkUrl.indexOf("#"));
 		}
 
 		if (linkUrl.startsWith("/"))
@@ -101,6 +108,53 @@ public class URLUtils
 		}
 
 		return getUrlPath(curPageUrl) + linkUrl;
+	}
+
+	/**
+	 * 解析子链接的相对路径（包含子链接名称）
+	 * 
+	 * @description 根据提供的跟路径 及 子链接路径，得到子链接路径与跟路径间的相对路径。
+	 * @param rootUrl
+	 *            根路径
+	 * @param subUrl
+	 *            子路径
+	 * @return String 相对路径
+	 */
+	public static String getSubRelativeLink(String rootUrl, String subUrl)
+	{
+		if (StringUtils.isEmpty(rootUrl) || StringUtils.isEmpty(subUrl))
+		{
+			return null;
+		}
+
+		String rootUrlPath = getUrlPath(rootUrl);
+		String subUrlPath = getUrlPath(subUrl);
+
+		String absPath = "";
+		// 如果两个连接是同一级的则直接返回页面名称
+		if (rootUrlPath.equals(subUrlPath))
+		{
+			absPath = subUrl.substring(subUrlPath.length());
+		}
+		// 如果要解析的路径不是指定路径的子路径则返回
+		else if (subUrl.startsWith(rootUrlPath))
+		{
+			absPath = subUrl.substring(rootUrlPath.length());
+		}
+		// 外网链接
+		else
+		{
+			return null;
+		}
+
+		// 相对路径以 / 开头
+		if (absPath.charAt(0) != '/')
+		{
+			// 真实路径为 配置路径/根页面名称abspath 所以在此处加上一个 /
+			absPath = "/" + absPath;
+		}
+
+		return absPath;
 	}
 
 	/**
@@ -128,7 +182,7 @@ public class URLUtils
 		}
 
 		String rsString = "";
-		// http://domain
+		// http://domain 判断是否为：协议+域名 的格式
 		if (curPageUrl.startsWith("http") && curPageUrl.lastIndexOf("/") <= 7)
 		{
 			rsString = curPageUrl;
@@ -136,10 +190,11 @@ public class URLUtils
 		else
 		{
 			// http://domain/.../Xxx.xx domain/Xxx.Xx
-			rsString = curPageUrl.substring(0, curPageUrl.lastIndexOf("/"));
+			rsString = curPageUrl.substring(0, curPageUrl.lastIndexOf("/") + 1);
 		}
 
-		if (rsString.indexOf(rsString.length() - 1) != '/')
+		// path最后要以 / 结尾
+		if (rsString.charAt(rsString.length() - 1) != '/')
 		{
 			rsString += "/";
 		}

@@ -1,4 +1,4 @@
-package com.robert.http.parse.jsoup;
+package com.robert.http.parse.jsoup.util;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -185,13 +185,12 @@ public class JsoupUtil
 		return getJS(document, curPageUrl, savePath, false);
 	}
 
-	public static List<Element> getAllSubLinks(Document document, String curPageUrl, String savePath, String contains)
+	public static List<Element> getAllSubLinks(Document document, String curPageUrl, String savePath)
 	{
 		return getSubLinks(document, curPageUrl, savePath, false);
 	}
 
-	public static List<Element> getDownloadSubLinks(Document document, String curPageUrl, String savePath,
-	        String contains)
+	public static List<Element> getDownloadSubLinks(Document document, String curPageUrl, String savePath)
 	{
 		return getSubLinks(document, curPageUrl, savePath, true);
 	}
@@ -266,6 +265,7 @@ public class JsoupUtil
 	 */
 	private static List<Element> getSubLinks(Document document, String curPageUrl, String savePath, boolean isUnique)
 	{
+		List<Element> elementList = new ArrayList<Element>();
 		Elements links = document.getElementsByTag(WebConstants.TAG_A);
 
 		for (Element element : links)
@@ -274,20 +274,33 @@ public class JsoupUtil
 			String linkUrl = element.attr(WebConstants.ATTR_HREF);
 			// 解析链接为合法地址(非相对地址)
 			String subLinkUrl = URLUtils.getSubLinkURL(curPageUrl, linkUrl);
+			if (null == subLinkUrl)
+			{
+				continue;
+			}
 			// 生成 original_url 保存原始地址
 			element.attr(WebConstants.ATTR_ORIGINAL_URL, subLinkUrl);
 
 			// TODO 从缓存中根据 original_url 拿出相对路径，如果存在则是用缓存中的相对路径，并 continue
 			// ，该连接不加入下载列表。
 
-			// 解析链接名称 生成子连接相对路径(父目录+子页面目录/子页面名称+.html)
-			String localABSPath = URLUtils.getUrlPath(curPageUrl);
+			// 解析链接名称 生成子连接相对路径(/子页面目录/子页面名称)
+			String localABSPath = URLUtils.getSubRelativeLink(curPageUrl, subLinkUrl);
+			if (null == localABSPath)
+			{
+				continue;
+			}
 			// 修改并保存连接相对路径
-
+			element.attr(WebConstants.ATTR_HREF, localABSPath);
 			// 去除重复连接
+			if (isUnique && elementList.contains(element))
+			{
+				continue;
+			}
+			elementList.add(element);
 		}
 
-		return null;
+		return elementList;
 	}
 
 }

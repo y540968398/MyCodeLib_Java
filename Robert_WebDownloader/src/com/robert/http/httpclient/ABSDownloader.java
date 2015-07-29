@@ -100,6 +100,7 @@ public abstract class ABSDownloader implements IHttpDownloader
 		}
 		logger.debug("Successed save page[" + url + "] to " + this.filePath);
 		logger.debug("Response status : " + responseStatus);
+		request.abort();
 
 		request = null;
 	}

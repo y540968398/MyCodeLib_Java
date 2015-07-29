@@ -9,12 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
 import com.robert.common.file.FileUtil;
@@ -90,8 +97,7 @@ public class HttpUtils
 	 * @param binParamMap
 	 *            文件参数键值对
 	 */
-	public static MultipartEntityBuilder getBinaryEntity(Map<String, String> stringParamMap,
-	        Map<String, String> binParamMap)
+	public static HttpEntity getBinaryEntity(Map<String, String> stringParamMap, Map<String, String> binParamMap)
 	{
 		MultipartEntityBuilder binaryEntity = MultipartEntityBuilder.create();
 
@@ -112,7 +118,7 @@ public class HttpUtils
 			binaryEntity.addBinaryBody(entry.getKey(), new File(entry.getValue()));
 		}
 
-		return binaryEntity;
+		return binaryEntity.build();
 	}
 
 	/**
@@ -121,7 +127,7 @@ public class HttpUtils
 	 * @param paramsMap
 	 *            参数键值对
 	 */
-	public static UrlEncodedFormEntity getStringEntity(Map<String, String> paramsMap)
+	public static HttpEntity getStringEntity(Map<String, String> paramsMap)
 	{
 		List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>(paramsMap.size());
 
@@ -133,7 +139,7 @@ public class HttpUtils
 
 		try
 		{
-			return new UrlEncodedFormEntity(nameValuePairList, "UTF-8");
+			return new UrlEncodedFormEntity(nameValuePairList);
 		}
 		catch (UnsupportedEncodingException e)
 		{
@@ -141,6 +147,31 @@ public class HttpUtils
 		}
 
 		return null;
+	}
+
+	public static void doPost(String url, Map<String, String> stringParamMap, Map<String, String> binParamMap)
+	{
+		HttpClient httpClient = new DefaultHttpClient();
+
+		HttpPost post = new HttpPost(url);
+		if (null == binParamMap)
+		{
+			post.setEntity(getStringEntity(stringParamMap));
+		}
+		else
+		{
+			post.setEntity(getBinaryEntity(stringParamMap, binParamMap));
+		}
+
+		try
+		{
+			httpClient.execute(post);
+		}
+		catch (Exception e)
+		{
+			logger.error("Sent post request to url[" + url + "] error!", e);
+		}
+		post.abort();
 	}
 
 }

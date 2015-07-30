@@ -11,6 +11,8 @@ import com.robert.common.thread.pool.IThreadPoolExecutor;
 import com.robert.http.constants.WebConstants;
 import com.robert.http.httpclient.IHttpDownloader;
 import com.robert.http.httpclient.thread.HttpDownloadRunner;
+import com.robert.http.page.bean.PageDealStatus;
+import com.robert.http.page.cache.DownloadCache;
 import com.robert.http.parse.jsoup.util.JsoupUtil;
 
 /**
@@ -66,10 +68,21 @@ public class WebSubPageDownloader extends WebPageDownloader
 		List<Element> subLinkList = JsoupUtil.getDownloadSubLinks(document, this.pageUrl, this.rootUrl);
 		for (Element element : subLinkList)
 		{
+			// 页面原始地址
+			String subPageUrl = element.attr(WebConstants.ATTR_ORIGINAL_URL);
+			// 判断页面是否已经下载过
+			if (DownloadCache.contains(subPageUrl))
+			{
+				if (!element.attr(WebConstants.ATTR_HREF).equals(DownloadCache.getUrlCachedPath(subPageUrl)))
+				{
+					element.attr(WebConstants.ATTR_HREF, DownloadCache.getUrlCachedPath(subPageUrl));
+					logger.debug("走到这里说明 路径 拼接有问题，同一个地址的相对路径应该是一致的！");
+				}
+				continue;
+			}
 			// 下载连接，并指定绝对路径(配置路径 + 链接的相对路径)
-			WebSubPageDownloader pageDownloader = new WebSubPageDownloader(this.rootUrl, this.rootUrlName,
-			        element.attr(WebConstants.ATTR_ORIGINAL_URL), this.rootUrlName
-			                + element.attr(WebConstants.ATTR_HREF), executor);
+			WebSubPageDownloader pageDownloader = new WebSubPageDownloader(this.rootUrl, this.rootUrlName, subPageUrl,
+			        this.rootUrlName + element.attr(WebConstants.ATTR_HREF), executor);
 			pageDownloader.downloadPage();
 		}
 

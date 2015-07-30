@@ -37,4 +37,13 @@ public class URLUtilsTest
 		        "http://domain.com/sixthpat/subpath/sub2/test.html");
 		Assert.assertEquals("/subpath/sub2/test.html", sub2);
 	}
+
+	
+	@Test
+	public void getSubLinkURL_parentUrl()
+	{
+		String sub2 = URLUtils.getSubLinkURL("http://domain.com/sixthpat/subpath/sub2/test.html",
+				"../../haha.html");
+		Assert.assertEquals("http://domain.com/sixthpat/haha.html", sub2);
+	}
 }

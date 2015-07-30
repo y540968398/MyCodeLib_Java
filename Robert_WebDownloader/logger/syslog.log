@@ -2455,3 +2455,7 @@ java.lang.IllegalStateException: Target host must not be null, or set in paramet
 2015-07-29 18:11:28 [ INFO] [     6ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
 2015-07-29 18:47:09 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
 2015-07-29 18:47:09 [ INFO] [     8ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-30 16:59:06 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-30 16:59:06 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !
+2015-07-30 17:04:07 [ INFO] [     0ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:27) [Trd:main] : Loading config files !
+2015-07-30 17:04:07 [ INFO] [     5ms] com.robert.common.cfglog.CfgUtil.initConfig(CfgUtil.java:34) [Trd:main] : Load config files success !

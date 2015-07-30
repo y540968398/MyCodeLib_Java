@@ -89,6 +89,13 @@ public class URLUtils
 			return linkUrl;
 		}
 
+		// 判断是否为调到上级目录的链接 ../../test.html
+		if (linkUrl.startsWith("../"))
+		{
+			// TODO  解析跳转到上层的链接
+			// MyTask 
+		}
+
 		// 判断是否为特殊的域名(hao.360.cn)直接以域名开头的地址 也是合法地址
 		String firstPart = linkUrl.substring(0, linkUrl.indexOf("/") + 1);
 		if (firstPart.contains("."))
@@ -111,7 +118,7 @@ public class URLUtils
 	}
 
 	/**
-	 * 解析子链接的相对路径（包含子链接名称）
+	 * 解析子链接的相对路径（包含子链接名称），过滤非子路径 和 外网连接。
 	 * 
 	 * @description 根据提供的跟路径 及 子链接路径，得到子链接路径与跟路径间的相对路径。
 	 * @param rootUrl
@@ -143,6 +150,11 @@ public class URLUtils
 		}
 		// 外网链接
 		else
+		{
+			return null;
+		}
+
+		if (StringUtils.isEmpty(absPath))
 		{
 			return null;
 		}

@@ -16,37 +16,31 @@ public class CacheDelegate implements IWebDownloadDelegate
 	@Override
 	public void startDownloadImage(PageDealStatus pageDealStatus)
 	{
-		DownloadCache.addTask(pageDealStatus);
 	}
 
 	@Override
 	public void startDownloadCss(PageDealStatus pageDealStatus)
 	{
-		DownloadCache.addTask(pageDealStatus);
 	}
 
 	@Override
 	public void startDownloadJS(PageDealStatus pageDealStatus)
 	{
-		DownloadCache.addTask(pageDealStatus);
 	}
 
 	@Override
 	public void endDownloadImage(PageDealStatus pageDealStatus)
 	{
-		DownloadCache.changeTaskStatus(pageDealStatus.getCurUrl(), DownloadStatus.DOWNLOADED);
 	}
 
 	@Override
 	public void endDownloadCss(PageDealStatus pageDealStatus)
 	{
-		DownloadCache.changeTaskStatus(pageDealStatus.getCurUrl(), DownloadStatus.DOWNLOADED);
 	}
 
 	@Override
 	public void endDownloadJS(PageDealStatus pageDealStatus)
 	{
-		DownloadCache.changeTaskStatus(pageDealStatus.getCurUrl(), DownloadStatus.DOWNLOADED);
 	}
 
 	@Override

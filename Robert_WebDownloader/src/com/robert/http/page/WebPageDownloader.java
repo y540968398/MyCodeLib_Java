@@ -15,6 +15,9 @@ import com.robert.http.constants.WebConstants;
 import com.robert.http.httpclient.GetDownloader;
 import com.robert.http.httpclient.IHttpDownloader;
 import com.robert.http.httpclient.thread.HttpDownloadRunner;
+import com.robert.http.page.bean.PageDealStatus;
+import com.robert.http.page.delegate.CacheDelegate;
+import com.robert.http.page.delegate.IWebDownloadDelegate;
 import com.robert.http.parse.jsoup.util.JsoupUtil;
 
 /**
@@ -47,6 +50,10 @@ public class WebPageDownloader
 	IHttpDownloader pageDownloader;
 	/** 线程池执行者 */
 	IThreadPoolExecutor<HttpDownloadRunner> executor;
+	/** 功能委派：默认为缓存委派 */
+	IWebDownloadDelegate delegate = new CacheDelegate();
+	/** 页面处理状态 */
+	PageDealStatus pageDealStatus;
 
 	// 业务参数
 	/** 根目录页面地址:域名 或 指定的页面 */
@@ -180,6 +187,16 @@ public class WebPageDownloader
 		this.pageDownloader = pageDownloader;
 	}
 
+	public IWebDownloadDelegate getDelegate()
+	{
+		return delegate;
+	}
+
+	public void setDelegate(IWebDownloadDelegate delegate)
+	{
+		this.delegate = delegate;
+	}
+
 	/**
 	 * 页面下载器
 	 * 
@@ -203,6 +220,7 @@ public class WebPageDownloader
 		this.pageUrlName = pageUrlName;
 		this.executor = executor;
 		this.pageDownloader = new GetDownloader();
+		this.pageDealStatus = new PageDealStatus(rootUrl, rootUrlName, pageUrl, pageUrlName);
 	}
 
 	/**
@@ -230,11 +248,13 @@ public class WebPageDownloader
 		this.pageUrlName = pageUrlName;
 		this.executor = executor;
 		this.pageDownloader = pageDownloader;
+		this.pageDealStatus = new PageDealStatus(rootUrl, rootUrlName, pageUrl, pageUrlName);
 	}
 
 	public void downloadPage()
 	{
 		// 下载页面
+		delegate.startDownloadPage(pageDealStatus);
 		downloadDocument();
 		// 下载 CSS 资源文件
 		if (isSaveCss)
@@ -267,6 +287,7 @@ public class WebPageDownloader
 	public void savePage()
 	{
 		JsoupUtil.saveDocument(document, pageSavePath);
+		delegate.endDownloadPage(pageDealStatus);
 		logger.info("Success save document[] to " + pageSavePath);
 	}
 

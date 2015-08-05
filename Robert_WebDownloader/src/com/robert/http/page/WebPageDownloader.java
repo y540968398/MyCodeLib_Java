@@ -48,8 +48,8 @@ public class WebPageDownloader
 	Document document;
 	/** 页面下载器，get post 下载器 */
 	IHttpDownloader pageDownloader;
-	/** 线程池执行者 */
-	IThreadPoolExecutor<HttpDownloadRunner> executor;
+	/** 线程池执行者:仅用于资源下载 */
+	IThreadPoolExecutor<HttpDownloadRunner> resourceExecutor;
 	/** 功能委派：默认为缓存委派 */
 	IWebDownloadDelegate delegate = new CacheDelegate();
 	/** 页面处理状态 */
@@ -125,7 +125,7 @@ public class WebPageDownloader
 		for (Element element : downLoadImgList)
 		{
 			// 下载资源时，指定绝对路径
-			executor.addTask(new HttpDownloadRunner(element.attr(WebConstants.ATTR_ORIGINAL_URL), CfgUtil
+			resourceExecutor.addTask(new HttpDownloadRunner(element.attr(WebConstants.ATTR_ORIGINAL_URL), CfgUtil
 			        .get(CfgConstants.DIR_PAGE_DOWNLOAD) + element.attr(WebConstants.ATTR_SRC)));
 		}
 		logger.debug("Add image download task to queue!");
@@ -149,7 +149,7 @@ public class WebPageDownloader
 		for (Element element : downloadCssList)
 		{
 			// 下载资源时，指定绝对路径
-			executor.addTask(new HttpDownloadRunner(element.attr(WebConstants.ATTR_ORIGINAL_URL), CfgUtil
+			resourceExecutor.addTask(new HttpDownloadRunner(element.attr(WebConstants.ATTR_ORIGINAL_URL), CfgUtil
 			        .get(CfgConstants.DIR_PAGE_DOWNLOAD) + element.attr(WebConstants.ATTR_HREF)));
 		}
 		logger.debug("Add CSS download task to queue!");
@@ -171,7 +171,7 @@ public class WebPageDownloader
 		for (Element element : downloadJsList)
 		{
 			// 下载资源时，指定绝对路径
-			executor.addTask(new HttpDownloadRunner(element.attr(WebConstants.ATTR_ORIGINAL_URL), CfgUtil
+			resourceExecutor.addTask(new HttpDownloadRunner(element.attr(WebConstants.ATTR_ORIGINAL_URL), CfgUtil
 			        .get(CfgConstants.DIR_PAGE_DOWNLOAD) + element.attr(WebConstants.ATTR_SRC)));
 		}
 		logger.debug("Add JS download task to queue!");
@@ -218,7 +218,7 @@ public class WebPageDownloader
 		this.rootUrlName = rootUrlName;
 		this.pageUrl = pageUrl;
 		this.pageUrlName = pageUrlName;
-		this.executor = executor;
+		this.resourceExecutor = executor;
 		this.pageDownloader = new GetDownloader();
 		this.pageDealStatus = new PageDealStatus(rootUrl, rootUrlName, pageUrl, pageUrlName);
 	}
@@ -246,7 +246,7 @@ public class WebPageDownloader
 		this.rootUrlName = rootUrlName;
 		this.pageUrl = pageUrl;
 		this.pageUrlName = pageUrlName;
-		this.executor = executor;
+		this.resourceExecutor = executor;
 		this.pageDownloader = pageDownloader;
 		this.pageDealStatus = new PageDealStatus(rootUrl, rootUrlName, pageUrl, pageUrlName);
 	}

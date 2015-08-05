@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class DefaultThreadFactory implements ThreadFactory
 {
-	
 	private static final AtomicInteger poolNumber = new AtomicInteger(1);
 	private final AtomicInteger threadNumber = new AtomicInteger(1);
 	private final ThreadGroup group;
@@ -29,5 +28,5 @@ public class DefaultThreadFactory implements ThreadFactory
 			localThread.setPriority(5);
 		return localThread;
 	}
-	
+
 }

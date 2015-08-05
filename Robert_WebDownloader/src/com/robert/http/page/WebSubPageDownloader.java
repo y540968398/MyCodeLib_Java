@@ -80,10 +80,13 @@ public class WebSubPageDownloader extends WebPageDownloader
 				}
 				continue;
 			}
-			// 下载连接，并指定绝对路径(配置路径 + 链接的相对路径)
-			WebSubPageDownloader pageDownloader = new WebSubPageDownloader(this.rootUrl, this.rootUrlName, subPageUrl,
-			        this.rootUrlName + element.attr(WebConstants.ATTR_HREF), executor);
-			pageDownloader.downloadPage();
+			
+			// TODO 将子页面下载的参数保存到list中，然后其线程池进行下载。
+			
+//			// 下载连接，并指定绝对路径(配置路径 + 链接的相对路径)
+//			WebSubPageDownloader pageDownloader = new WebSubPageDownloader(this.rootUrl, this.rootUrlName, subPageUrl,
+//			        this.rootUrlName + element.attr(WebConstants.ATTR_HREF), executor);
+//			pageDownloader.downloadPage();
 		}
 
 		logger.info("WebPage[" + this.pageUrl + "] download successed !");

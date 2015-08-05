@@ -14,12 +14,17 @@ public class ThreadUtil
 			logger.debug("Cur thread sleep : " + millionSecond + " ms");
 			Thread.currentThread();
 			Thread.sleep(millionSecond);
-			
+
 		}
 		catch (InterruptedException e)
 		{
 			logger.error("Sleep failed !", e);
 		}
+	}
+
+	public static int getThreadNum()
+	{
+		return Runtime.getRuntime().availableProcessors() * 6;
 	}
 
 }

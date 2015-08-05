@@ -2,6 +2,8 @@ package com.robert.common.web.http;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.robert.common.file.DirectoryUtils;
+
 public class URLUtils
 {
 
@@ -89,11 +91,10 @@ public class URLUtils
 			return linkUrl;
 		}
 
-		// 判断是否为调到上级目录的链接 ../../test.html
-		if (linkUrl.startsWith("../"))
+		// 子连接如果是类似 url#top 锚点的,则去掉锚点
+		if (linkUrl.contains("#"))
 		{
-			// TODO  解析跳转到上层的链接
-			// MyTask 
+			linkUrl = linkUrl.substring(0, linkUrl.indexOf("#"));
 		}
 
 		// 判断是否为特殊的域名(hao.360.cn)直接以域名开头的地址 也是合法地址
@@ -103,15 +104,16 @@ public class URLUtils
 			return linkUrl;
 		}
 
-		// 子连接如果是类似 url#top 锚点的，则去掉锚点
-		if (linkUrl.contains("#"))
-		{
-			linkUrl = linkUrl.substring(0, linkUrl.indexOf("#"));
-		}
-
 		if (linkUrl.startsWith("/"))
 		{
 			return getDomainName(curPageUrl) + linkUrl;
+		}
+
+		// 判断是否为调到上级目录的链接 ../../test.html
+		if (linkUrl.startsWith("../"))
+		{
+			// 解析跳转到上层的链接
+			return DirectoryUtils.getParentPath(getUrlPath(curPageUrl), linkUrl);
 		}
 
 		return getUrlPath(curPageUrl) + linkUrl;
@@ -170,7 +172,7 @@ public class URLUtils
 	}
 
 	/**
-	 * 获取当前地址对应的路径
+	 * 获取当前地址对应的路径，以 / 结尾。
 	 * 
 	 * @description 1.页面地址如 :http://domain/.../Xxx.Xx <br/>
 	 *              &nbsp;&nbsp;&nbsp;&nbsp;页面路径地址: http://domain/.../

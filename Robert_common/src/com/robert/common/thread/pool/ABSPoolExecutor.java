@@ -8,16 +8,22 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
-import com.robert.common.thread.ThreadUtil;
-import com.robert.common.time.TimeUtil;
+import com.robert.common.thread.DefaultThreadFactory;
 
-public class CachedPoolExecutor<T extends Runnable> implements IThreadPoolExecutor<T>
+public class ABSPoolExecutor<T extends Runnable> implements IThreadPoolExecutor<T>
 {
 
-	private Logger logger = Logger.getLogger(CachedPoolExecutor.class);
+	private Logger logger = Logger.getLogger(ABSPoolExecutor.class);
 
-	public BlockingQueue<T> taskQueue = new LinkedBlockingQueue<T>();
-	ExecutorService executors = Executors.newCachedThreadPool();
+	public BlockingQueue<T> taskQueue;
+	ExecutorService executors;
+
+	@Override
+	public void initThreadPool()
+	{
+		this.taskQueue = new LinkedBlockingQueue<T>();
+		this.executors = Executors.newCachedThreadPool(new DefaultThreadFactory());
+	}
 
 	@Override
 	public void addTask(T t)
@@ -33,7 +39,7 @@ public class CachedPoolExecutor<T extends Runnable> implements IThreadPoolExecut
 		}
 	}
 
-	private T getTask()
+	protected T getTask()
 	{
 		try
 		{
@@ -50,21 +56,6 @@ public class CachedPoolExecutor<T extends Runnable> implements IThreadPoolExecut
 	@Override
 	public void startDealTask()
 	{
-		// logger.info("Start deal task from queue ！");
-		// new Thread(new Runnable()
-		// {
-		//
-		// @Override
-		// public void run()
-		// {
-		T t = null;
-		while ((t = getTask()) != null)
-		{
-			executors.execute(t);
-		}
-		executors.shutdown();
-		// }
-		// }).start();
 	}
 
 }

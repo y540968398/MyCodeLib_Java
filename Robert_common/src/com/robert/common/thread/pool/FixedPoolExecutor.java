@@ -13,7 +13,6 @@ import com.robert.common.thread.ThreadUtil;
 public class FixedPoolExecutor<T extends Runnable> extends ABSPoolExecutor<T> implements IThreadPoolExecutor<T>
 {
 
-	private static Logger logger = Logger.getLogger(FixedPoolExecutor.class);
 
 	public BlockingQueue<T> taskQueue;
 	ExecutorService executors;

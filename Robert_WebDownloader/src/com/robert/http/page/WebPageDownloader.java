@@ -10,6 +10,8 @@ import org.jsoup.nodes.Element;
 
 import com.robert.common.cfglog.CfgConstants;
 import com.robert.common.cfglog.CfgUtil;
+import com.robert.common.file.DirectoryUtils;
+import com.robert.common.web.http.URLUtils;
 import com.robert.http.constants.WebConstants;
 import com.robert.http.httpclient.GetDownloader;
 import com.robert.http.httpclient.IHttpDownloader;
@@ -74,6 +76,8 @@ public class WebPageDownloader
 	 *              子页面名称：如果未指定名称，则获取url中最后一部分作为文件名称
 	 */
 	String pageSavePath;
+	/** 当前页面的资源相对于主页面目录的相对路径，所有资源都以此目录为根目录存放，所以当前页面的资源要跳转到此目录 */
+	String rsRelPath2root;
 
 	/**
 	 * 下载页面
@@ -115,8 +119,7 @@ public class WebPageDownloader
 	protected void downloadImages()
 	{
 		// 修改资源地址到相对路径
-		List<Element> downLoadImgList = JsoupUtil.getDownloadImages(document, this.pageUrl,
-		        this.pageUrlName + CfgUtil.get(CfgConstants.DIR_IMG_DOWNLOAD));
+		List<Element> downLoadImgList = JsoupUtil.getDownloadImages(document, this.pageUrl, rsRelPath2root);
 		downloadReourse(downLoadImgList);
 		logger.debug("Add image download task to queue!");
 	}
@@ -133,8 +136,7 @@ public class WebPageDownloader
 	protected void downloadCss()
 	{
 		// 修改资源地址到相对路径
-		List<Element> downloadCssList = JsoupUtil.getDownloadCss(document, this.pageUrl,
-		        this.rootUrl + CfgUtil.get(CfgConstants.DIR_CSS_DOWNLOAD));
+		List<Element> downloadCssList = JsoupUtil.getDownloadCss(document, this.pageUrl, rsRelPath2root);
 		downloadReourse(downloadCssList);
 		logger.debug("Add CSS download task to queue!");
 	}
@@ -149,8 +151,7 @@ public class WebPageDownloader
 	protected void downloadJS()
 	{
 		// 修改资源地址到相对路径
-		List<Element> downloadJsList = JsoupUtil.getDownloadJS(document, this.pageUrl,
-		        this.rootUrl + CfgUtil.get(CfgConstants.DIR_JS_DOWNLOAD));
+		List<Element> downloadJsList = JsoupUtil.getDownloadJS(document, this.pageUrl, rsRelPath2root);
 		downloadReourse(downloadJsList);
 		logger.debug("Add JS download task to queue!");
 	}
@@ -174,7 +175,8 @@ public class WebPageDownloader
 				continue;
 			}
 			// 下载的相对路径
-			String resSaveRelPath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + element.attr(WebConstants.ATTR_SRC);
+			String resSaveRelPath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + this.pageUrlName
+			        + DirectoryUtils.getPathWithoutJump(element.attr(WebConstants.ATTR_SRC));
 			// 加入缓存
 			ResourceCache.addResource(resUrl, resSaveRelPath);
 			// 下载资源时，指定绝对路径
@@ -249,6 +251,10 @@ public class WebPageDownloader
 		// 下载页面
 		delegate.startDownloadPage(pageDealStatus);
 		downloadDocument();
+
+		// 跳转到跟路径的相对路径表示字符串
+		this.rsRelPath2root = DirectoryUtils.getRelPath(this.rootUrl, this.pageUrl);
+
 		// 下载 CSS 资源文件
 		if (isSaveCss)
 		{

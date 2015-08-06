@@ -3,6 +3,7 @@ package com.robert.common.web.http;
 import org.apache.commons.lang.StringUtils;
 
 import com.robert.common.file.DirectoryUtils;
+import com.robert.common.strings.StringsUtils;
 
 public class URLUtils
 {
@@ -113,23 +114,23 @@ public class URLUtils
 		if (linkUrl.startsWith("../"))
 		{
 			// 解析跳转到上层的链接
-			return DirectoryUtils.getParentPath(getUrlPath(curPageUrl), linkUrl);
+			return DirectoryUtils.getLink4RelParentPath(getUrlPath(curPageUrl), linkUrl);
 		}
 
 		return getUrlPath(curPageUrl) + linkUrl;
 	}
 
 	/**
-	 * 解析子链接的相对路径（包含子链接名称），过滤非子路径 和 外网连接。
+	 * 获取 跳转到 子链接 的相对路径，并过验证 URL 是否为子链接 ，或外网链接。
 	 * 
-	 * @description 根据提供的跟路径 及 子链接路径，得到子链接路径与跟路径间的相对路径。
+	 * @description 根据 父链接 子连接 间的关系，得到 父链接页面 跳转到 子连接页面 的相对路径。
 	 * @param rootUrl
-	 *            根路径
+	 *            父链接
 	 * @param subUrl
-	 *            子路径
+	 *            子链接
 	 * @return String 相对路径
 	 */
-	public static String getSubRelativeLink(String rootUrl, String subUrl)
+	public static String getPath2SubLink(String rootUrl, String subUrl)
 	{
 		if (StringUtils.isEmpty(rootUrl) || StringUtils.isEmpty(subUrl))
 		{
@@ -143,7 +144,7 @@ public class URLUtils
 		// 如果两个连接是同一级的则直接返回页面名称
 		if (rootUrlPath.equals(subUrlPath))
 		{
-			absPath = subUrl.substring(subUrlPath.length());
+			absPath = "/" + getFileName(subUrl);
 		}
 		// 如果要解析的路径不是指定路径的子路径则返回
 		else if (subUrl.startsWith(rootUrlPath))
@@ -218,18 +219,40 @@ public class URLUtils
 	/**
 	 * 获取当前地址对应的路径，以 / 结尾且不包含域名。
 	 * 
-	 * @description 1.页面地址如 :http://domain/.../Xxx.Xx <br/>
-	 *              &nbsp;&nbsp;&nbsp;&nbsp;页面路径地址: http://domain/.../
-	 *              2.如果页面地址中包含 ../
-	 *              之类的地址，直接访问时由浏览器进行解析，最终跳转到一个真实的url，这样的url不用转换。
+	 * @description 1.以 协议://域名/path/名称 形式的合法路径，获取其 path 部分 <br/>
+	 *              该部分以 "/" 开头结尾 <br/>
+	 *              2.如果是相对连接，则直接返回
 	 * @param curPageUrl
 	 *            当前页面地址
-	 * @return String 当前页面地址对应的网站目录地址
+	 * @return String 当前页面地址对应的网站目录地址，不包含协议 与 域名部分
 	 */
 	public static String getUrlPathNoneDomain(String curPageUrl)
 	{
 		String urlPath = getUrlPath(curPageUrl);
-		String firstPart = urlPath.substring(0, urlPath.indexOf("/"));
+		int firstSepIndex = urlPath.indexOf("/");
+		int lastSepIndex = urlPath.lastIndexOf("/");
+
+		// URL开头至第一个分隔符的部分
+		String firstPart = urlPath.substring(0, urlPath.indexOf("/") + 1);
+
+		// 以合法 协议://域名 开头的连接
+		if (firstPart.startsWith("http"))
+		{
+			// 仅为 协议://域名/
+			int thirdSepIdx = StringsUtils.indexOfLevel(urlPath, "/", 3);
+			// 截取第三个 分隔符 后面的字符串
+			if (thirdSepIdx != -1 && thirdSepIdx != urlPath.lastIndexOf("/"))
+			{
+				urlPath = urlPath.substring(thirdSepIdx, urlPath.lastIndexOf("/") + 1);
+			}
+		}
+
+		// 仅以域名 开头发连接
+		if (firstPart.contains(".") && !firstPart.contains("../"))
+		{
+			urlPath = urlPath.substring(firstSepIndex, lastSepIndex + 1);
+		}
+
 		return urlPath;
 	}
 
@@ -247,6 +270,18 @@ public class URLUtils
 			return url.substring(0, url.indexOf("?"));
 		}
 		return url;
+	}
+
+	/**
+	 * 解析两个路径的相对关系
+	 * 
+	 * @param rootUrl
+	 * @param pageUrl
+	 * @return
+	 */
+	public static String getRelativePath(String rootUrl, String pageUrl)
+	{
+		return null;
 	}
 
 }

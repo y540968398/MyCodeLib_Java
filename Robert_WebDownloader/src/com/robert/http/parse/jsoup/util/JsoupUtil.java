@@ -106,14 +106,14 @@ public class JsoupUtil
 	 *            是否去重重复元素
 	 * @param curPageUrl
 	 *            元素的所在页面的 baseURL,用于还原相对连接为合法连接。
-	 * @param rsTypeSavePath
-	 *            元素类型保存的相对目录
+	 * @param rootRelPath
+	 *            跳转到根目录的相对路径
 	 * @param srcAttr
 	 *            元素链接属性(SRC HREF 等属性)，将被修改为相对路径。
 	 * @return List<Element> 下载的元素集合
 	 */
 	public static List<Element> getDownloadElement(Elements elements, boolean isUnique, String curPageUrl,
-	        String rsTypeSavePath, String srcAttr)
+	        String rootRelPath, String srcAttr)
 	{
 		Set<String> uniqueEleSrcSet = new HashSet<String>();
 
@@ -127,10 +127,10 @@ public class JsoupUtil
 			// 保存元素原始链接地址
 			element.attr(WebConstants.ATTR_ORIGINAL_URL, eleUrl);
 
-			// 元素本地保存地址
-			String eleSavePath = URLUtils.getUrlPath(eleUrl);
+			// 元素本地保存的相对路径
+			String eleSaveRelPath = rootRelPath + URLUtils.getUrlPathNoneDomain(eleUrl) + URLUtils.getFileName(eleUrl);
 			// 修改元素链接地址为本地链接
-			element.attr(srcAttr, eleSavePath);
+			element.attr(srcAttr, eleSaveRelPath);
 
 			// 如果是下载模式，过滤重复的文件，但每个链接的路径要修改
 			if (isUnique && uniqueEleSrcSet.contains(eleUrl))
@@ -276,7 +276,7 @@ public class JsoupUtil
 			// ，该连接不加入下载列表。
 
 			// 解析链接名称 生成子连接相对路径(/子页面目录/子页面名称)
-			String localABSPath = URLUtils.getSubRelativeLink(curPageUrl, subLinkUrl);
+			String localABSPath = URLUtils.getPath2SubLink(curPageUrl, subLinkUrl);
 			if (null == localABSPath)
 			{
 				continue;

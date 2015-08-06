@@ -8,7 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.robert.http.enums.DownloadStatus;
 import com.robert.http.page.bean.PageDealStatus;
 
-public class DownloadCache
+public class PageDownloadCache
 {
 
 	private static Map<String, PageDealStatus> downloadMap = new ConcurrentHashMap<String, PageDealStatus>();

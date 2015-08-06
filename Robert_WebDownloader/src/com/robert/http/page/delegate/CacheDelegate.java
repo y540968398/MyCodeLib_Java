@@ -2,20 +2,23 @@ package com.robert.http.page.delegate;
 
 import com.robert.http.enums.DownloadStatus;
 import com.robert.http.page.bean.PageDealStatus;
-import com.robert.http.page.cache.DownloadCache;
+import com.robert.http.page.cache.PageDownloadCache;
 
-public class CacheDelegate implements IWebDownloadDelegate
+public enum CacheDelegate implements IWebDownloadDelegate
 {
+
+	INSTANCE;
 
 	@Override
 	public void startDownloadPage(PageDealStatus pageDealStatus)
 	{
-		DownloadCache.addTask(pageDealStatus);
+		PageDownloadCache.addTask(pageDealStatus);
 	}
 
 	@Override
 	public void startDownloadImage(PageDealStatus pageDealStatus)
 	{
+		
 	}
 
 	@Override
@@ -46,7 +49,7 @@ public class CacheDelegate implements IWebDownloadDelegate
 	@Override
 	public void endDownloadPage(PageDealStatus pageDealStatus)
 	{
-		DownloadCache.changeTaskStatus(pageDealStatus.getCurUrl(), DownloadStatus.DOWNLOADED);
+		PageDownloadCache.changeTaskStatus(pageDealStatus.getCurUrl(), DownloadStatus.DOWNLOADED);
 	}
 
 }

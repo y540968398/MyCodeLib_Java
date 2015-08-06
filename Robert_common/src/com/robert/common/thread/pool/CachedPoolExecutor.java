@@ -15,8 +15,8 @@ public class CachedPoolExecutor<T extends Runnable> extends ABSPoolExecutor<T> i
 	@Override
 	public void initThreadPool()
 	{
-		this.taskQueue = new LinkedBlockingQueue<T>();
-		this.executors = Executors.newCachedThreadPool(new DefaultThreadFactory());
+		super.taskQueue = new LinkedBlockingQueue<T>();
+		super.executors = Executors.newCachedThreadPool(new DefaultThreadFactory());
 	}
 
 	@Override
@@ -27,6 +27,7 @@ public class CachedPoolExecutor<T extends Runnable> extends ABSPoolExecutor<T> i
 		{
 			executors.execute(t);
 		}
+		logger.info("CachedPoolExecutor shutdown !");
 		executors.shutdown();
 	}
 

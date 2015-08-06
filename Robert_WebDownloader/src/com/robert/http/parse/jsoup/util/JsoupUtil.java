@@ -97,7 +97,7 @@ public class JsoupUtil
 	/**
 	 * 解析下载的元素，修改链接地址为本地地址，并保存原始链接。
 	 * 
-	 * @description 1.链接改为 本地相对路径，savePath/链接中的文件名称(相对地址)<br/>
+	 * @description 1.链接 仅记录 资源URL的 路径 (即链接除去 http://domain 部分)<br/>
 	 *              2.生成 original_url ，保存原始的 完整链接，如果没有域名则会拼接域名。
 	 * 
 	 * @param elements
@@ -105,17 +105,15 @@ public class JsoupUtil
 	 * @param isUnique
 	 *            是否去重重复元素
 	 * @param curPageUrl
-	 *            元素的所在页面的 baseURL
-	 * @param savePath
-	 *            元素保存的路径，建议为 相对路径。
+	 *            元素的所在页面的 baseURL,用于还原相对连接为合法连接。
+	 * @param rsTypeSavePath
+	 *            元素类型保存的相对目录
 	 * @param srcAttr
-	 *            元素链接属性，将被修改为相对路径。
-	 * @param srcRemoteAttr
-	 *            元素链接属性的副本，用于保存元素原始链接。
+	 *            元素链接属性(SRC HREF 等属性)，将被修改为相对路径。
 	 * @return List<Element> 下载的元素集合
 	 */
 	public static List<Element> getDownloadElement(Elements elements, boolean isUnique, String curPageUrl,
-	        String savePath, String srcAttr)
+	        String rsTypeSavePath, String srcAttr)
 	{
 		Set<String> uniqueEleSrcSet = new HashSet<String>();
 
@@ -126,18 +124,13 @@ public class JsoupUtil
 			String eleUrl = URLUtils.parseNoCacheUrl(element.attr(srcAttr));
 			// 解析元素合法的链接
 			eleUrl = URLUtils.getSubLinkURL(curPageUrl, eleUrl);
-
-			// TODO 从缓存中根据 eleUrl 拿出相对路径，如果存在则是用缓存中的相对路径，并 continue ，该连接不加入下载列表。
-
-			// 元素本地保存地址
-			if (StringUtils.isNotEmpty(savePath))
-			{
-				String eleSavePath = savePath + URLUtils.getFileName(eleUrl);
-				// 修改元素链接地址为本地链接
-				element.attr(srcAttr, eleSavePath);
-			}
 			// 保存元素原始链接地址
 			element.attr(WebConstants.ATTR_ORIGINAL_URL, eleUrl);
+
+			// 元素本地保存地址
+			String eleSavePath = URLUtils.getUrlPath(eleUrl);
+			// 修改元素链接地址为本地链接
+			element.attr(srcAttr, eleSavePath);
 
 			// 如果是下载模式，过滤重复的文件，但每个链接的路径要修改
 			if (isUnique && uniqueEleSrcSet.contains(eleUrl))
@@ -185,14 +178,14 @@ public class JsoupUtil
 		return getJS(document, curPageUrl, savePath, false);
 	}
 
-	public static List<Element> getAllSubLinks(Document document, String curPageUrl, String savePath)
+	public static List<Element> getAllSubLinks(Document document, String curPageUrl)
 	{
-		return getSubLinks(document, curPageUrl, savePath, false);
+		return getSubLinks(document, curPageUrl, false);
 	}
 
-	public static List<Element> getDownloadSubLinks(Document document, String curPageUrl, String savePath)
+	public static List<Element> getDownloadSubLinks(Document document, String curPageUrl)
 	{
-		return getSubLinks(document, curPageUrl, savePath, true);
+		return getSubLinks(document, curPageUrl, true);
 	}
 
 	/**
@@ -230,7 +223,7 @@ public class JsoupUtil
 		}
 	}
 
-	private static List<Element> getJS(Document document, String curPageUrl, String savePath, boolean isUnique)
+	private static List<Element> getJS(Document document, String curPageUrl, String rootUrl, boolean isUnique)
 	{
 		Elements downloadJS = new Elements();
 		Elements allJSElements = document.getElementsByAttributeValue("type", "text/javascript");
@@ -242,7 +235,7 @@ public class JsoupUtil
 				downloadJS.add(element);
 			}
 		}
-		return getDownloadElement(downloadJS, isUnique, curPageUrl, savePath, WebConstants.ATTR_SRC);
+		return getDownloadElement(downloadJS, isUnique, curPageUrl, rootUrl, WebConstants.ATTR_SRC);
 	}
 
 	/**
@@ -257,13 +250,11 @@ public class JsoupUtil
 	 * @param curPageUrl
 	 *            父页面原始地址，用于解析 连接中的相对地址。<br/>
 	 *            <U><B>由于子页面的所有相对地址都是从根目录开始的，所以加上域名即是资源的合法 URL</B></U>
-	 * @param savePath
-	 *            父页面目录，用于拼接子页面下载目录
 	 * @param isUnique
 	 *            是否去除重复连接
 	 * @return
 	 */
-	private static List<Element> getSubLinks(Document document, String curPageUrl, String savePath, boolean isUnique)
+	private static List<Element> getSubLinks(Document document, String curPageUrl, boolean isUnique)
 	{
 		List<Element> elementList = new ArrayList<Element>();
 		Elements links = document.getElementsByTag(WebConstants.TAG_A);
@@ -290,8 +281,8 @@ public class JsoupUtil
 			{
 				continue;
 			}
-			// 修改并保存连接相对路径
-			element.attr(WebConstants.ATTR_HREF, localABSPath);
+			// 修改并保存连接相对路径：由于页面在下载时，并不知道其后缀名是什么样的有的是静态链接，有的是动态链接，这里统一加.html
+			element.attr(WebConstants.ATTR_HREF, localABSPath + WebConstants.SURFIX_HTML);
 			// 去除重复连接
 			if (isUnique && elementList.contains(element))
 			{

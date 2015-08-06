@@ -99,7 +99,7 @@ public class URLUtils
 
 		// 判断是否为特殊的域名(hao.360.cn)直接以域名开头的地址 也是合法地址
 		String firstPart = linkUrl.substring(0, linkUrl.indexOf("/") + 1);
-		if (firstPart.contains("."))
+		if (!firstPart.startsWith("../") && firstPart.contains("."))
 		{
 			return linkUrl;
 		}
@@ -172,12 +172,12 @@ public class URLUtils
 	}
 
 	/**
-	 * 获取当前地址对应的路径，以 / 结尾。
+	 * 获取当前连接中包含的路径信息
 	 * 
-	 * @description 1.页面地址如 :http://domain/.../Xxx.Xx <br/>
-	 *              &nbsp;&nbsp;&nbsp;&nbsp;页面路径地址: http://domain/.../
-	 *              2.如果页面地址中包含 ../
-	 *              之类的地址，直接访问时由浏览器进行解析，最终跳转到一个真实的url，这样的url不用转换。
+	 * @description 1. 获取合法链接(http://domain/path/../conten.htm) <br/>
+	 *              中包含的路径信息 (http://domain/path/../)<br/>
+	 *              2. 获取相对连接中的路径信息 ../path/path/content.htm ----> ../path/path/
+	 * 
 	 * @param curPageUrl
 	 *            当前页面地址
 	 * @return String 当前页面地址对应的网站目录地址
@@ -199,20 +199,37 @@ public class URLUtils
 		// http://domain 判断是否为：协议+域名 的格式
 		if (curPageUrl.startsWith("http") && curPageUrl.lastIndexOf("/") <= 7)
 		{
+			// path最后要以 / 结尾
+			if (curPageUrl.charAt(curPageUrl.length() - 1) != '/')
+			{
+				rsString += "/";
+			}
 			rsString = curPageUrl;
 		}
 		else
 		{
-			// http://domain/.../Xxx.xx domain/Xxx.Xx
+			// 带路径的合法链接、相对链接(包含跳转到父路径的相对连接)
 			rsString = curPageUrl.substring(0, curPageUrl.lastIndexOf("/") + 1);
 		}
 
-		// path最后要以 / 结尾
-		if (rsString.charAt(rsString.length() - 1) != '/')
-		{
-			rsString += "/";
-		}
 		return rsString;
+	}
+
+	/**
+	 * 获取当前地址对应的路径，以 / 结尾且不包含域名。
+	 * 
+	 * @description 1.页面地址如 :http://domain/.../Xxx.Xx <br/>
+	 *              &nbsp;&nbsp;&nbsp;&nbsp;页面路径地址: http://domain/.../
+	 *              2.如果页面地址中包含 ../
+	 *              之类的地址，直接访问时由浏览器进行解析，最终跳转到一个真实的url，这样的url不用转换。
+	 * @param curPageUrl
+	 *            当前页面地址
+	 * @return String 当前页面地址对应的网站目录地址
+	 */
+	public static String getUrlPathNoneDomain(String curPageUrl)
+	{
+		String urlPath = getUrlPath(curPageUrl);
+		return urlPath;
 	}
 
 	/**

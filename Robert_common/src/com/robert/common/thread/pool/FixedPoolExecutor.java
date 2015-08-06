@@ -1,11 +1,7 @@
 package com.robert.common.thread.pool;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import org.apache.log4j.Logger;
 
 import com.robert.common.thread.DefaultThreadFactory;
 import com.robert.common.thread.ThreadUtil;
@@ -13,15 +9,11 @@ import com.robert.common.thread.ThreadUtil;
 public class FixedPoolExecutor<T extends Runnable> extends ABSPoolExecutor<T> implements IThreadPoolExecutor<T>
 {
 
-
-	public BlockingQueue<T> taskQueue;
-	ExecutorService executors;
-
 	@Override
 	public void initThreadPool()
 	{
-		this.taskQueue = new LinkedBlockingQueue<>();
-		this.executors = Executors.newFixedThreadPool(ThreadUtil.getThreadNum(), new DefaultThreadFactory());
+		super.taskQueue = new LinkedBlockingQueue<>();
+		super.executors = Executors.newFixedThreadPool(ThreadUtil.getThreadNum(), new DefaultThreadFactory());
 	}
 
 	@Override
@@ -43,6 +35,7 @@ public class FixedPoolExecutor<T extends Runnable> extends ABSPoolExecutor<T> im
 				}
 			});
 		}
+		executors.shutdown();
 	}
 
 }

@@ -7,12 +7,11 @@ import org.jsoup.nodes.Element;
 
 import com.robert.common.cfglog.CfgConstants;
 import com.robert.common.cfglog.CfgUtil;
-import com.robert.common.thread.pool.IThreadPoolExecutor;
 import com.robert.http.constants.WebConstants;
 import com.robert.http.httpclient.IHttpDownloader;
-import com.robert.http.httpclient.thread.HttpDownloadRunner;
-import com.robert.http.page.bean.PageDealStatus;
-import com.robert.http.page.cache.DownloadCache;
+import com.robert.http.httpclient.thread.WebPageDownloadRunner;
+import com.robert.http.page.cache.PageDownloadCache;
+import com.robert.http.page.launch.WebDownloaderLaunch;
 import com.robert.http.parse.jsoup.util.JsoupUtil;
 
 /**
@@ -37,17 +36,16 @@ public class WebSubPageDownloader extends WebPageDownloader
 	private boolean isSaveSub = CfgUtil.getBoolean(CfgConstants.IS_DOWNLOAD_SUB);
 
 	// 业务控制参数
-	public WebSubPageDownloader(String rootUrl, String rootUrlName, String pageUrl, String pageUrlName,
-	        IThreadPoolExecutor<HttpDownloadRunner> executor)
+	public WebSubPageDownloader(String rootUrl, String rootUrlName, String pageUrl, String pageUrlName)
 	{
-		super(rootUrl, rootUrlName, pageUrl, pageUrlName, executor);
+		super(rootUrl, rootUrlName, pageUrl, pageUrlName);
 
 	}
 
 	public WebSubPageDownloader(String rootUrl, String rootUrlName, String pageUrl, String pageUrlName,
-	        IThreadPoolExecutor<HttpDownloadRunner> executor, IHttpDownloader pageDownloader)
+	        IHttpDownloader pageDownloader)
 	{
-		super(rootUrl, rootUrlName, pageUrl, pageUrlName, executor, pageDownloader);
+		super(rootUrl, rootUrlName, pageUrl, pageUrlName, pageDownloader);
 	}
 
 	@Override
@@ -65,31 +63,35 @@ public class WebSubPageDownloader extends WebPageDownloader
 	private void downloadSubPage()
 	{
 		// 解析链接，并修改连接地址到相对路径
-		List<Element> subLinkList = JsoupUtil.getDownloadSubLinks(document, this.pageUrl, this.rootUrl);
+		List<Element> subLinkList = JsoupUtil.getDownloadSubLinks(document, this.pageUrl);
 		for (Element element : subLinkList)
 		{
 			// 页面原始地址
 			String subPageUrl = element.attr(WebConstants.ATTR_ORIGINAL_URL);
 			// 判断页面是否已经下载过
-			if (DownloadCache.contains(subPageUrl))
+			if (PageDownloadCache.contains(subPageUrl))
 			{
-				if (!element.attr(WebConstants.ATTR_HREF).equals(DownloadCache.getUrlCachedPath(subPageUrl)))
+				if (subPageUrl.equals(this.rootUrl))
 				{
-					element.attr(WebConstants.ATTR_HREF, DownloadCache.getUrlCachedPath(subPageUrl));
+					element.attr(WebConstants.ATTR_HREF, this.rootUrlName + WebConstants.SURFIX_HTML);
+				}
+				else if (!element.attr(WebConstants.ATTR_HREF).equals(PageDownloadCache.getUrlCachedPath(subPageUrl)))
+				{
+					element.attr(WebConstants.ATTR_HREF, PageDownloadCache.getUrlCachedPath(subPageUrl));
 					logger.debug("走到这里说明 路径 拼接有问题，同一个地址的相对路径应该是一致的！");
 				}
 				continue;
 			}
-			
-			// TODO 将子页面下载的参数保存到list中，然后其线程池进行下载。
-			
-//			// 下载连接，并指定绝对路径(配置路径 + 链接的相对路径)
-//			WebSubPageDownloader pageDownloader = new WebSubPageDownloader(this.rootUrl, this.rootUrlName, subPageUrl,
-//			        this.rootUrlName + element.attr(WebConstants.ATTR_HREF), executor);
-//			pageDownloader.downloadPage();
+
+			// 将相对路径修改为 与 根目录相对的路径：即 相对路径 加上根路径
+			String relativePath = this.rootUrlName + element.attr(WebConstants.ATTR_HREF);
+			element.attr(WebConstants.ATTR_HREF, relativePath);
+
+			// 下载连接，并指定绝对路径(配置路径 + 链接的相对路径)
+			WebDownloaderLaunch.pagePoolExecutor.addTask(new WebPageDownloadRunner(new WebSubPageDownloader(
+			        this.rootUrl, this.rootUrlName, subPageUrl, relativePath)));
 		}
 
 		logger.info("WebPage[" + this.pageUrl + "] download successed !");
 	}
-
 }

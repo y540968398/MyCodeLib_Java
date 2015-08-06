@@ -10,14 +10,15 @@ import org.jsoup.nodes.Element;
 
 import com.robert.common.cfglog.CfgConstants;
 import com.robert.common.cfglog.CfgUtil;
-import com.robert.common.thread.pool.IThreadPoolExecutor;
 import com.robert.http.constants.WebConstants;
 import com.robert.http.httpclient.GetDownloader;
 import com.robert.http.httpclient.IHttpDownloader;
 import com.robert.http.httpclient.thread.HttpDownloadRunner;
 import com.robert.http.page.bean.PageDealStatus;
+import com.robert.http.page.cache.ResourceCache;
 import com.robert.http.page.delegate.CacheDelegate;
 import com.robert.http.page.delegate.IWebDownloadDelegate;
+import com.robert.http.page.launch.WebDownloaderLaunch;
 import com.robert.http.parse.jsoup.util.JsoupUtil;
 
 /**
@@ -46,12 +47,8 @@ public class WebPageDownloader
 	boolean isSaveJS = CfgUtil.getBoolean(CfgConstants.IS_DOWNLOAD_JS);
 	/** 页面文档 */
 	Document document;
-	/** 页面下载器，get post 下载器 */
-	IHttpDownloader pageDownloader;
-	/** 线程池执行者:仅用于资源下载 */
-	IThreadPoolExecutor<HttpDownloadRunner> resourceExecutor;
 	/** 功能委派：默认为缓存委派 */
-	IWebDownloadDelegate delegate = new CacheDelegate();
+	IWebDownloadDelegate delegate = CacheDelegate.INSTANCE;
 	/** 页面处理状态 */
 	PageDealStatus pageDealStatus;
 
@@ -89,13 +86,12 @@ public class WebPageDownloader
 	{
 		if (StringUtils.isNotEmpty(pageUrlName) && !rootUrl.equals(pageUrl))
 		{
-			// 子页面
-			pageSavePath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + this.rootUrlName + this.pageUrlName
-			        + WebConstants.SURFIX_HTML;
+			// 子页面：跟路径+跟名称+当前相对连接+.html
+			pageSavePath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + this.pageUrlName;
 		}
 		else
 		{
-			// 根页面
+			// 根页面：根路径+根名称+.html
 			pageSavePath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + this.rootUrlName + WebConstants.SURFIX_HTML;
 		}
 
@@ -103,7 +99,7 @@ public class WebPageDownloader
 		getDownloader.downPage(this.pageUrl, pageSavePath);
 		if (getDownloader.getResponseStatus() != HttpStatus.SC_OK)
 		{
-			logger.error("Download page error !");
+			logger.error("Download page[" + this.pageUrl + "] error !");
 			return;
 		}
 		document = JsoupUtil.getDocFromFile(pageSavePath);
@@ -113,21 +109,15 @@ public class WebPageDownloader
 	 * 下载图片
 	 * 
 	 * @description 1.下载当前页面关联的图片资源，下载到当前页面名称对应的文件夹中，并将当前页面中 img 的链接修改为相对路径。<br/>
-	 *              2.页面图片下载路径:pro:{dir_page_download}/pageName/pro:{
-	 *              dir_img_download}<br/>
+	 *              2.页面图片下载路径:所有资源下载路径统一为 配置路径 + 资源类型 中 <br/>
 	 *              3.使用线程池进行下载
 	 */
 	protected void downloadImages()
 	{
 		// 修改资源地址到相对路径
 		List<Element> downLoadImgList = JsoupUtil.getDownloadImages(document, this.pageUrl,
-		        this.rootUrl + CfgUtil.get(CfgConstants.DIR_IMG_DOWNLOAD));
-		for (Element element : downLoadImgList)
-		{
-			// 下载资源时，指定绝对路径
-			resourceExecutor.addTask(new HttpDownloadRunner(element.attr(WebConstants.ATTR_ORIGINAL_URL), CfgUtil
-			        .get(CfgConstants.DIR_PAGE_DOWNLOAD) + element.attr(WebConstants.ATTR_SRC)));
-		}
+		        this.pageUrlName + CfgUtil.get(CfgConstants.DIR_IMG_DOWNLOAD));
+		downloadReourse(downLoadImgList);
 		logger.debug("Add image download task to queue!");
 	}
 
@@ -136,8 +126,7 @@ public class WebPageDownloader
 	 * 
 	 * @description 1.下载当前页面关联的css样式资源，下载到当前页面名称对应的文件夹中，并将当前页面中 css样式
 	 *              的链接修改为相对路径。<br/>
-	 *              2.页面图片下载路径:pro:{dir_page_download}/pageName/pro:{
-	 *              dir_css_download}<br/>
+	 *              2.页面Css下载路径:所有资源下载路径统一为 配置路径 + 资源类型 中 <br/>
 	 *              3.使用线程池进行下载
 	 * 
 	 */
@@ -146,12 +135,7 @@ public class WebPageDownloader
 		// 修改资源地址到相对路径
 		List<Element> downloadCssList = JsoupUtil.getDownloadCss(document, this.pageUrl,
 		        this.rootUrl + CfgUtil.get(CfgConstants.DIR_CSS_DOWNLOAD));
-		for (Element element : downloadCssList)
-		{
-			// 下载资源时，指定绝对路径
-			resourceExecutor.addTask(new HttpDownloadRunner(element.attr(WebConstants.ATTR_ORIGINAL_URL), CfgUtil
-			        .get(CfgConstants.DIR_PAGE_DOWNLOAD) + element.attr(WebConstants.ATTR_HREF)));
-		}
+		downloadReourse(downloadCssList);
 		logger.debug("Add CSS download task to queue!");
 	}
 
@@ -159,8 +143,7 @@ public class WebPageDownloader
 	 * 下载JS资源
 	 * 
 	 * @description 1.下载当前页面关联的 JS 资源，下载到当前页面名称对应的文件夹中，并将当前页面中 JS资源 的链接修改为相对路径。<br/>
-	 *              2.页面图片下载路径:pro:{dir_page_download}/pageName/pro:{
-	 *              dir_js_download}<br/>
+	 *              2.页面JS下载路径:所有资源下载路径统一为 配置路径 + 资源类型 中 <br/>
 	 *              3.使用线程池进行下载
 	 */
 	protected void downloadJS()
@@ -168,23 +151,35 @@ public class WebPageDownloader
 		// 修改资源地址到相对路径
 		List<Element> downloadJsList = JsoupUtil.getDownloadJS(document, this.pageUrl,
 		        this.rootUrl + CfgUtil.get(CfgConstants.DIR_JS_DOWNLOAD));
-		for (Element element : downloadJsList)
-		{
-			// 下载资源时，指定绝对路径
-			resourceExecutor.addTask(new HttpDownloadRunner(element.attr(WebConstants.ATTR_ORIGINAL_URL), CfgUtil
-			        .get(CfgConstants.DIR_PAGE_DOWNLOAD) + element.attr(WebConstants.ATTR_SRC)));
-		}
+		downloadReourse(downloadJsList);
 		logger.debug("Add JS download task to queue!");
 	}
 
-	public IHttpDownloader getPageDownloader()
+	/**
+	 * 下载资源文件
+	 * 
+	 * @description 判断缓存中是否存在，若不存在则下载资源。
+	 * @param downloadJsList
+	 *            资源集合
+	 */
+	private void downloadReourse(List<Element> downloadJsList)
 	{
-		return pageDownloader;
-	}
-
-	public void setPageDownloader(IHttpDownloader pageDownloader)
-	{
-		this.pageDownloader = pageDownloader;
+		for (Element element : downloadJsList)
+		{
+			// 资源原始地址
+			String resUrl = element.attr(WebConstants.ATTR_ORIGINAL_URL);
+			// 判断是否已经在下载中，或已经下载过。
+			if (ResourceCache.containsUrl(resUrl))
+			{
+				continue;
+			}
+			// 下载的相对路径
+			String resSaveRelPath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + element.attr(WebConstants.ATTR_SRC);
+			// 加入缓存
+			ResourceCache.addResource(resUrl, resSaveRelPath);
+			// 下载资源时，指定绝对路径
+			WebDownloaderLaunch.resourcePoolExecutor.addTask(new HttpDownloadRunner(resUrl, resSaveRelPath));
+		}
 	}
 
 	public IWebDownloadDelegate getDelegate()
@@ -211,15 +206,12 @@ public class WebPageDownloader
 	 * @param executor
 	 *            资源下载线程池
 	 */
-	public WebPageDownloader(String rootUrl, String rootUrlName, String pageUrl, String pageUrlName,
-	        IThreadPoolExecutor<HttpDownloadRunner> executor)
+	public WebPageDownloader(String rootUrl, String rootUrlName, String pageUrl, String pageUrlName)
 	{
 		this.rootUrl = rootUrl;
 		this.rootUrlName = rootUrlName;
 		this.pageUrl = pageUrl;
 		this.pageUrlName = pageUrlName;
-		this.resourceExecutor = executor;
-		this.pageDownloader = new GetDownloader();
 		this.pageDealStatus = new PageDealStatus(rootUrl, rootUrlName, pageUrl, pageUrlName);
 	}
 
@@ -240,17 +232,18 @@ public class WebPageDownloader
 	 *            HTTP请求下载器(POST GET)
 	 */
 	public WebPageDownloader(String rootUrl, String rootUrlName, String pageUrl, String pageUrlName,
-	        IThreadPoolExecutor<HttpDownloadRunner> executor, IHttpDownloader pageDownloader)
+	        IHttpDownloader pageDownloader)
 	{
 		this.rootUrl = rootUrl;
 		this.rootUrlName = rootUrlName;
 		this.pageUrl = pageUrl;
 		this.pageUrlName = pageUrlName;
-		this.resourceExecutor = executor;
-		this.pageDownloader = pageDownloader;
 		this.pageDealStatus = new PageDealStatus(rootUrl, rootUrlName, pageUrl, pageUrlName);
 	}
 
+	/**
+	 * 下载页面，及其关联的资源文件
+	 */
 	public void downloadPage()
 	{
 		// 下载页面
@@ -288,7 +281,7 @@ public class WebPageDownloader
 	{
 		JsoupUtil.saveDocument(document, pageSavePath);
 		delegate.endDownloadPage(pageDealStatus);
-		logger.info("Success save document[] to " + pageSavePath);
+		logger.info("Success save document[" + this.pageUrl + "] to " + pageSavePath);
 	}
 
 }

@@ -229,6 +229,7 @@ public class URLUtils
 	public static String getUrlPathNoneDomain(String curPageUrl)
 	{
 		String urlPath = getUrlPath(curPageUrl);
+		String firstPart = urlPath.substring(0, urlPath.indexOf("/"));
 		return urlPath;
 	}
 

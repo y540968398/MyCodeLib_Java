@@ -1,0 +1,66 @@
+.t1 {font-size: 10pt;font-family:"新細明體"; color:#868686; text-align:center; line-height:150%}
+.t2 {font-size: 10pt;font-family:"新細明體"; color:#868686; text-align:left; line-height:150%}
+.t2b {font-size: 10pt;font-family:"新細明體"; color:#868686}
+.t2c {font-size: 10pt;font-family:"新細明體"; color:#666699; line-height:150%}
+.t3 {font-size: 11pt;font-family:"新細明體"; color:#868686; text-align:left; line-height:150%}
+.t3b {font-size: 11pt;font-family:"新細明體"; color:#868686; text-align:center; line-height:150%}
+.t3c {font-size: 11pt;font-family:"新細明體"; color:#666699; line-height:150%}
+.t4 {font-size: 12pt;line-height: 20pt;font-family: "新細明體";color:#000000;text-align: left; font-weight:bold}
+.t4b {font-size: 12pt;line-height: 20pt;font-family: "新細明體";color:#868686; font-weight:bold}
+.t5 {font-size: 12pt;line-height: 20pt;font-family: "新細明體";color:#000000;text-align: left; font-weight:bold; margin-left:100}
+.t6{FONT-SIZE: 20pt; color: #666699; FONT-FAMILY: "新細明體"; margin-top:12; font-weight:bold}
+.t7{FONT-SIZE: 10pt; color: #CACADB; FONT-FAMILY: "Arial"; line-height:150%; text-align:right}
+.t8{FONT-SIZE: 10pt; color: #CACADB; FONT-FAMILY: "Arial"; line-height:150%; text-align:left}
+.title {font-size: 18pt;font-family:"新細明體";color:#000000;font-weight:bold;margin-bottom:15px;text-align:center;
+	padding-bottom: 10px;border-bottom-width: 1px;border-bottom-style: solid;border-bottom-color: #CCCCCC}
+.title2 {font-size: 18pt;font-family:"新細明體";color:#000000;font-weight:bold;margin-bottom:30px;text-align:center;
+	padding-bottom: 10px;border-bottom-width: 1px;border-bottom-style: solid;border-bottom-color: #CCCCCC}
+.sutra {font-size: 12pt;line-height: 20pt;font-family: "新細明體";color:#000000;font-weight:bold;text-align: left}
+.commentary {font-size: 12pt;line-height: 20pt;font-family: "新細明體";color:#000000;text-align: left}
+.commentary2 {font-size: 12pt;line-height: 20pt;font-family: "新細明體";color:#868686;text-align: center}
+.commentary3 {font-size: 12pt;line-height: 20pt;font-family: "新細明體";color:#868686; margin-left:220px}
+.verse {font-size: 14pt;line-height:150%; font-family: "標楷體"; color:#CC0000; text-align:center}
+.verse2 {
+	font-size: 14pt;
+	line-height:150%;
+	font-family: "標楷體";
+	color:#996600;
+	text-align:center;
+	background-color: #FFFAEE;
+	border: 1px solid #996600;
+	margin-bottom: 30px;
+	padding: 6pt;
+
+}
+.verse3 {font-size: 12pt;line-height:20pt; font-family: "新細明體"; color:#CC6600; margin-left:80px; font-weight:bold}
+.verse4 {font-size: 12pt;line-height:20pt; font-family: "新細明體"; color:#800080; margin-left:80px}
+.subtitle {
+	font-size: 12pt;
+	line-height:150%;
+	font-family: "新細明體";
+	color:#666699;
+	text-align:center;
+	background-color: #F7F7F9;
+	border: 1px solid #666699;
+	margin-bottom: 30px;
+	padding: 2pt;; font-weight:bold
+
+}
+.spacer {
+	clear: both;
+	height: 5px;
+}
+a.{text-decoration: none;}
+a:link {
+	color:#666699;
+	text-decoration: none;
+}
+a:visited {
+	color:#666699;
+	text-decoration: none;
+}
+a:active {
+	color:#666699;
+	text-decoration: none;
+}
+a:hover {color:#CC9900; text-decoration:underline}

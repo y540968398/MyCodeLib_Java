@@ -136,4 +136,44 @@ public class DirectoryUtilsT
 		Assert.assertEquals("/province/shanxi/xian/", relPath);
 	}
 
+	@Test
+	public void getRelPath_06()
+	{
+		String destPath = "http://www.sina.com.cn/news/province/shanxi/xian/";
+		String curPath = "http://www.sina.com.cn/news/province/shanxi/xian/";
+		String relPath = DirectoryUtils.getRelPath(curPath, destPath);
+		
+		Assert.assertEquals(null, relPath);
+	}
+
+	@Test
+	public void getRelPath_07()
+	{
+		String destPath = "http://www.sina.com.cn/news/province/shanxi/xian/aaaa";
+		String curPath = "http://www.sina.com.cn/news/province/shanxi/xian/bbbb";
+		String relPath = DirectoryUtils.getRelPath(curPath, destPath);
+		
+		Assert.assertEquals(null, relPath);
+	}
+
+	@Test
+	public void getRelPath_08()
+	{
+		String destPath = "http://www.sina.com.cn/news/province/shanxi/xian/aaaa";
+		String curPath = "http://www.sina.com.cn/news/province/shanxi/xian/";
+		String relPath = DirectoryUtils.getRelPath(curPath, destPath);
+		
+		Assert.assertEquals(null, relPath);
+	}
+
+	@Test
+	public void getRelPath_09()
+	{
+		String destPath = "http://www.sina.com.cn/news/province/shanxi/xian/";
+		String curPath = "http://www.sina.com.cn/news/province/shanxi/xian/bbbb";
+		String relPath = DirectoryUtils.getRelPath(curPath, destPath);
+		
+		Assert.assertEquals(null, relPath);
+	}
+
 }

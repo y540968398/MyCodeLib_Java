@@ -120,7 +120,7 @@ public class WebPageDownloader
 	{
 		// 修改资源地址到相对路径
 		List<Element> downLoadImgList = JsoupUtil.getDownloadImages(document, this.pageUrl, rsRelPath2root);
-		downloadReourse(downLoadImgList);
+		downloadReourse(downLoadImgList, WebConstants.ATTR_SRC);
 		logger.debug("Add image download task to queue!");
 	}
 
@@ -137,7 +137,7 @@ public class WebPageDownloader
 	{
 		// 修改资源地址到相对路径
 		List<Element> downloadCssList = JsoupUtil.getDownloadCss(document, this.pageUrl, rsRelPath2root);
-		downloadReourse(downloadCssList);
+		downloadReourse(downloadCssList, WebConstants.ATTR_HREF);
 		logger.debug("Add CSS download task to queue!");
 	}
 
@@ -152,7 +152,7 @@ public class WebPageDownloader
 	{
 		// 修改资源地址到相对路径
 		List<Element> downloadJsList = JsoupUtil.getDownloadJS(document, this.pageUrl, rsRelPath2root);
-		downloadReourse(downloadJsList);
+		downloadReourse(downloadJsList, WebConstants.ATTR_SRC);
 		logger.debug("Add JS download task to queue!");
 	}
 
@@ -163,7 +163,7 @@ public class WebPageDownloader
 	 * @param downloadJsList
 	 *            资源集合
 	 */
-	private void downloadReourse(List<Element> downloadJsList)
+	private void downloadReourse(List<Element> downloadJsList, String linkAttr)
 	{
 		for (Element element : downloadJsList)
 		{
@@ -175,8 +175,8 @@ public class WebPageDownloader
 				continue;
 			}
 			// 下载的相对路径
-			String resSaveRelPath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + this.pageUrlName
-			        + DirectoryUtils.getPathWithoutJump(element.attr(WebConstants.ATTR_SRC));
+			String resSaveRelPath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + WebConstants.URL_SEPERATOR
+			        + DirectoryUtils.getPathWithoutJump(element.attr(linkAttr));
 			// 加入缓存
 			ResourceCache.addResource(resUrl, resSaveRelPath);
 			// 下载资源时，指定绝对路径
@@ -252,8 +252,14 @@ public class WebPageDownloader
 		delegate.startDownloadPage(pageDealStatus);
 		downloadDocument();
 
+		if (null == document)
+		{
+			logger.error("Document is null, Down load page[" + this.pageUrl + "] error！");
+			return;
+		}
+
 		// 跳转到跟路径的相对路径表示字符串
-		this.rsRelPath2root = DirectoryUtils.getRelPath(this.rootUrl, this.pageUrl);
+		getRsRelPath();
 
 		// 下载 CSS 资源文件
 		if (isSaveCss)
@@ -274,6 +280,16 @@ public class WebPageDownloader
 		if (isSavePage)
 		{
 			savePage();
+		}
+	}
+
+	private void getRsRelPath()
+	{
+		String resourcePath = DirectoryUtils.getRelPath(URLUtils.getUrlPath(this.rootUrl), this.pageUrl);
+		this.rsRelPath2root = resourcePath == null ? "" : resourcePath;
+		if (this.rootUrl.equals(this.pageUrl))
+		{
+			this.rsRelPath2root = this.pageUrlName + WebConstants.URL_SEPERATOR;
 		}
 	}
 

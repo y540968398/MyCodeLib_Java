@@ -53,11 +53,11 @@ public class WebSubPageDownloader extends WebPageDownloader
 	{
 		super.isSavePage = false;
 		super.downloadPage();
-		if (isSaveSub)
+		if (isSaveSub && null != document)
 		{
 			downloadSubPage();
+			super.savePage();
 		}
-		super.savePage();
 	}
 
 	private void downloadSubPage()
@@ -68,6 +68,13 @@ public class WebSubPageDownloader extends WebPageDownloader
 		{
 			// 页面原始地址
 			String subPageUrl = element.attr(WebConstants.ATTR_ORIGINAL_URL);
+
+			if (subPageUrl
+			        .startsWith("http://www.drbachinese.org/online_reading_simplified/sutra_explanation/SixthPat/tanjing"))
+			{
+				logger.error("link error !");
+			}
+
 			// 判断页面是否已经下载过
 			if (PageDownloadCache.contains(subPageUrl))
 			{

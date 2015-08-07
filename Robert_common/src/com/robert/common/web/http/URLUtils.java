@@ -92,6 +92,12 @@ public class URLUtils
 			return linkUrl;
 		}
 
+		// 连接到当前页面的 锚点 或 参数
+		if (linkUrl.startsWith("#") || linkUrl.startsWith("?"))
+		{
+			return curPageUrl;
+		}
+
 		// 子连接如果是类似 url#top 锚点的,则去掉锚点
 		if (linkUrl.contains("#"))
 		{
@@ -220,7 +226,7 @@ public class URLUtils
 	 * 获取当前地址对应的路径，以 / 结尾且不包含域名。
 	 * 
 	 * @description 1.以 协议://域名/path/名称 形式的合法路径，获取其 path 部分 <br/>
-	 *              该部分以 "/" 开头结尾 <br/>
+	 *              该部分以 "第一级路径名" 开头 以"/"结尾 <br/>
 	 *              2.如果是相对连接，则直接返回
 	 * @param curPageUrl
 	 *            当前页面地址
@@ -243,14 +249,14 @@ public class URLUtils
 			// 截取第三个 分隔符 后面的字符串
 			if (thirdSepIdx != -1 && thirdSepIdx != urlPath.lastIndexOf("/"))
 			{
-				urlPath = urlPath.substring(thirdSepIdx, urlPath.lastIndexOf("/") + 1);
+				urlPath = urlPath.substring(thirdSepIdx + 1, urlPath.lastIndexOf("/") + 1);
 			}
 		}
 
 		// 仅以域名 开头发连接
 		if (firstPart.contains(".") && !firstPart.contains("../"))
 		{
-			urlPath = urlPath.substring(firstSepIndex, lastSepIndex + 1);
+			urlPath = urlPath.substring(firstSepIndex + 1, lastSepIndex + 1);
 		}
 
 		return urlPath;

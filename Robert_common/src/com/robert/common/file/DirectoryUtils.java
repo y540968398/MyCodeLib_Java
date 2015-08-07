@@ -41,9 +41,14 @@ public class DirectoryUtils
 	 */
 	public static String getPathWithoutJump(String parentRelativePath)
 	{
+		if (StringUtils.isEmpty(parentRelativePath))
+		{
+			return null;
+		}
 		String[] rsArr = StringUtils.splitByWholeSeparator(parentRelativePath, "/");
 
 		StringBuilder resultStrb = new StringBuilder();
+
 		for (String rs : rsArr)
 		{
 			if (!rs.equals(".."))
@@ -109,7 +114,8 @@ public class DirectoryUtils
 	public static String getRelPath(String destPath, String curPath)
 	{
 		// 路径相同 或 为空字符串
-		if (StringUtils.isEmpty(curPath) || StringUtils.isEmpty(destPath) || destPath.equals(curPath))
+		if (StringUtils.isEmpty(curPath) || StringUtils.isEmpty(destPath) || destPath.equals(curPath)
+		        || getDir(curPath).equals(getDir(destPath)))
 		{
 			return null;
 		}
@@ -145,6 +151,37 @@ public class DirectoryUtils
 		stb.append(destPath.substring(diffIdx));
 
 		return stb.toString();
+	}
+
+	/**
+	 * 获取地址中的路径部分
+	 * 
+	 * @param path
+	 * @return String 文件路径
+	 */
+	public static String getDir(String path)
+	{
+		if (StringUtils.isEmpty(path))
+		{
+			return null;
+		}
+		return path.substring(0, path.lastIndexOf("/") + 1);
+	}
+
+	/**
+	 * 获取地址中的文件名称
+	 * 
+	 * @param path
+	 *            文件具体地址
+	 * @return String 文件名称
+	 */
+	public static String getFileName(String path)
+	{
+		if (StringUtils.isEmpty(path))
+		{
+			return null;
+		}
+		return path.substring(path.lastIndexOf("/") + 1);
 	}
 
 }

@@ -74,6 +74,17 @@ public class URLUtilsTest
 	}
 
 	@Test
+	public void getSubLinkURL_06()
+	{
+		String sub2 = URLUtils.getSubLinkURL(
+		        "http://www.drbachinese.org/online_reading_simplified/sutra_explanation/SixthPat/sixthpatSutra.htm",
+		        "#top");
+		Assert.assertEquals(
+		        "http://www.drbachinese.org/online_reading_simplified/sutra_explanation/SixthPat/sixthpatSutra.htm",
+		        sub2);
+	}
+
+	@Test
 	public void getUrlPathNoneDomain_01()
 	{
 		String url = "http://www.sina.com.cn/path1/path2/path3/contents.html";
@@ -81,13 +92,13 @@ public class URLUtilsTest
 
 		Assert.assertEquals("/path1/path2/path3/", path);
 	}
-	
+
 	@Test
 	public void getUrlPathNoneDomain_02()
 	{
 		String url = "www.sina.com.cn/path1/path2/path3/contents.html";
 		String path = URLUtils.getUrlPathNoneDomain(url);
-		
+
 		Assert.assertEquals("/path1/path2/path3/", path);
 	}
 
@@ -96,7 +107,7 @@ public class URLUtilsTest
 	{
 		String url = "/path1/path2/path3/contents.html";
 		String path = URLUtils.getUrlPathNoneDomain(url);
-		
+
 		Assert.assertEquals("/path1/path2/path3/", path);
 	}
 
@@ -105,7 +116,7 @@ public class URLUtilsTest
 	{
 		String url = "path1/path2/path3/contents.html";
 		String path = URLUtils.getUrlPathNoneDomain(url);
-		
+
 		Assert.assertEquals("path1/path2/path3/", path);
 	}
 
@@ -114,8 +125,8 @@ public class URLUtilsTest
 	{
 		String url = "../path1/path2/path3/contents.html";
 		String path = URLUtils.getUrlPathNoneDomain(url);
-		
+
 		Assert.assertEquals("../path1/path2/path3/", path);
 	}
-	
+
 }

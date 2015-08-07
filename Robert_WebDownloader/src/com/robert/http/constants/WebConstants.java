@@ -18,6 +18,8 @@ public class WebConstants
 	public static final String HTTP = "http";
 	public static final String WWW = "www";
 
+	public static final String CSS_SELECTOR_A_HREF = "a[href]";
+
 	/** URL 路径分隔符 */
 	public static final String URL_SEPERATOR = "/";
 

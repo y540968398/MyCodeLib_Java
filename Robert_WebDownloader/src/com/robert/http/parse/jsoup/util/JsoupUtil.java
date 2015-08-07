@@ -263,12 +263,15 @@ public class JsoupUtil
 		{
 			// 链接地址
 			String linkUrl = element.attr(WebConstants.ATTR_HREF);
+			
 			// 解析链接为合法地址(非相对地址)
 			String subLinkUrl = URLUtils.getSubLinkURL(curPageUrl, linkUrl);
+
 			if (null == subLinkUrl)
 			{
 				continue;
 			}
+
 			// 生成 original_url 保存原始地址
 			element.attr(WebConstants.ATTR_ORIGINAL_URL, subLinkUrl);
 

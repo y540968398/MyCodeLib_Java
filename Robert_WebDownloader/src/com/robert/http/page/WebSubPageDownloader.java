@@ -80,7 +80,7 @@ public class WebSubPageDownloader extends WebPageDownloader
 			{
 				if (subPageUrl.equals(this.rootUrl))
 				{
-					element.attr(WebConstants.ATTR_HREF, this.rootUrlName + WebConstants.SURFIX_HTML);
+					element.attr(WebConstants.ATTR_HREF, WebConstants.SURFIX_HTML);
 				}
 				else if (!element.attr(WebConstants.ATTR_HREF).equals(PageDownloadCache.getUrlCachedPath(subPageUrl)))
 				{
@@ -91,12 +91,12 @@ public class WebSubPageDownloader extends WebPageDownloader
 			}
 
 			// 将相对路径修改为 与 根目录相对的路径：即 相对路径 加上根路径
-			String relativePath = this.rootUrlName + element.attr(WebConstants.ATTR_HREF);
-			element.attr(WebConstants.ATTR_HREF, relativePath);
+			String relativePath = this.rootDirName +"/"+ element.attr(WebConstants.ATTR_HREF);
+//			element.attr(WebConstants.ATTR_HREF, relativePath);
 
 			// 下载连接，并指定绝对路径(配置路径 + 链接的相对路径)
 			WebDownloaderLaunch.pagePoolExecutor.addTask(new WebPageDownloadRunner(new WebSubPageDownloader(
-			        this.rootUrl, this.rootUrlName, subPageUrl, relativePath)));
+			        this.rootUrl, this.rootDirName, subPageUrl, relativePath)));
 		}
 
 		logger.info("WebPage[" + this.pageUrl + "] download successed !");

@@ -11,7 +11,7 @@ public class URLUtilsTest
 	{
 		String sub1 = URLUtils.getPath2SubLink("http://domain.com/sixthpat/contents.html",
 		        "http://domain.com/sixthpat/test.html");
-		Assert.assertEquals("/test.html", sub1);
+		Assert.assertEquals("test.html", sub1);
 	}
 
 	@Test
@@ -19,7 +19,7 @@ public class URLUtilsTest
 	{
 		String sub2 = URLUtils.getPath2SubLink("http://domain.com/sixthpat/contents.html",
 		        "http://domain.com/sixthpat/subpath/test.html");
-		Assert.assertEquals("/subpath/test.html", sub2);
+		Assert.assertEquals("subpath/test.html", sub2);
 	}
 
 	@Test
@@ -27,7 +27,7 @@ public class URLUtilsTest
 	{
 		String sub2 = URLUtils.getPath2SubLink("http://domain.com/sixthpat/contents.html",
 		        "http://domain.com/sixthpat/subpath/sub2/test.html");
-		Assert.assertEquals("/subpath/sub2/test.html", sub2);
+		Assert.assertEquals("subpath/sub2/test.html", sub2);
 	}
 
 	@Test
@@ -35,7 +35,7 @@ public class URLUtilsTest
 	{
 		String sub2 = URLUtils.getPath2SubLink("http://domain.com/sixthpat/contents.html",
 		        "http://domain.com/sixthpat/subpath/sub2/test.html");
-		Assert.assertEquals("/subpath/sub2/test.html", sub2);
+		Assert.assertEquals("subpath/sub2/test.html", sub2);
 	}
 
 	@Test
@@ -80,7 +80,7 @@ public class URLUtilsTest
 		        "http://www.drbachinese.org/online_reading_simplified/sutra_explanation/SixthPat/sixthpatSutra.htm",
 		        "#top");
 		Assert.assertEquals(
-		        "http://www.drbachinese.org/online_reading_simplified/sutra_explanation/SixthPat/sixthpatSutra.htm",
+		        null,
 		        sub2);
 	}
 
@@ -90,7 +90,7 @@ public class URLUtilsTest
 		String url = "http://www.sina.com.cn/path1/path2/path3/contents.html";
 		String path = URLUtils.getUrlPathNoneDomain(url);
 
-		Assert.assertEquals("/path1/path2/path3/", path);
+		Assert.assertEquals("path1/path2/path3/", path);
 	}
 
 	@Test
@@ -99,7 +99,7 @@ public class URLUtilsTest
 		String url = "www.sina.com.cn/path1/path2/path3/contents.html";
 		String path = URLUtils.getUrlPathNoneDomain(url);
 
-		Assert.assertEquals("/path1/path2/path3/", path);
+		Assert.assertEquals("path1/path2/path3/", path);
 	}
 
 	@Test

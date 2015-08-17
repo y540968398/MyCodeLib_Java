@@ -57,8 +57,8 @@ public class WebPageDownloader
 	// 业务参数
 	/** 根目录页面地址:域名 或 指定的页面 */
 	String rootUrl;
-	/** 根目录页面保存名称 */
-	String rootUrlName;
+	/** 页面下载的根目录 */
+	String rootDirName;
 	/** 下载的页面地址 */
 	String pageUrl;
 	/**
@@ -96,7 +96,7 @@ public class WebPageDownloader
 		else
 		{
 			// 根页面：根路径+根名称+.html
-			pageSavePath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + this.rootUrlName + WebConstants.SURFIX_HTML;
+			pageSavePath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + this.rootDirName +"/" +URLUtils.getFileName(pageUrl) + WebConstants.SURFIX_HTML;
 		}
 
 		GetDownloader getDownloader = new GetDownloader();
@@ -211,7 +211,7 @@ public class WebPageDownloader
 	public WebPageDownloader(String rootUrl, String rootUrlName, String pageUrl, String pageUrlName)
 	{
 		this.rootUrl = rootUrl;
-		this.rootUrlName = rootUrlName;
+		this.rootDirName = rootUrlName;
 		this.pageUrl = pageUrl;
 		this.pageUrlName = pageUrlName;
 		this.pageDealStatus = new PageDealStatus(rootUrl, rootUrlName, pageUrl, pageUrlName);
@@ -237,7 +237,7 @@ public class WebPageDownloader
 	        IHttpDownloader pageDownloader)
 	{
 		this.rootUrl = rootUrl;
-		this.rootUrlName = rootUrlName;
+		this.rootDirName = rootUrlName;
 		this.pageUrl = pageUrl;
 		this.pageUrlName = pageUrlName;
 		this.pageDealStatus = new PageDealStatus(rootUrl, rootUrlName, pageUrl, pageUrlName);
@@ -287,10 +287,10 @@ public class WebPageDownloader
 	{
 		String resourcePath = DirectoryUtils.getRelPath(URLUtils.getUrlPath(this.rootUrl), this.pageUrl);
 		this.rsRelPath2root = resourcePath == null ? "" : resourcePath;
-		if (this.rootUrl.equals(this.pageUrl))
-		{
-			this.rsRelPath2root = this.pageUrlName + WebConstants.URL_SEPERATOR;
-		}
+//		if (this.rootUrl.equals(this.pageUrl))
+//		{
+//			this.rsRelPath2root = this.pageUrlName + WebConstants.URL_SEPERATOR;
+//		}
 	}
 
 	/**

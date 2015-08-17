@@ -92,10 +92,10 @@ public class URLUtils
 			return linkUrl;
 		}
 
-		// 连接到当前页面的 锚点 或 参数
+		// 连接到当前页面的 锚点 或 参数 不处理子连接
 		if (linkUrl.startsWith("#") || linkUrl.startsWith("?"))
 		{
-			return curPageUrl;
+			return null;
 		}
 
 		// 子连接如果是类似 url#top 锚点的,则去掉锚点
@@ -150,7 +150,7 @@ public class URLUtils
 		// 如果两个连接是同一级的则直接返回页面名称
 		if (rootUrlPath.equals(subUrlPath))
 		{
-			absPath = "/" + getFileName(subUrl);
+			absPath = getFileName(subUrl);
 		}
 		// 如果要解析的路径不是指定路径的子路径则返回
 		else if (subUrl.startsWith(rootUrlPath))
@@ -166,13 +166,6 @@ public class URLUtils
 		if (StringUtils.isEmpty(absPath))
 		{
 			return null;
-		}
-
-		// 相对路径以 / 开头
-		if (absPath.charAt(0) != '/')
-		{
-			// 真实路径为 配置路径/根页面名称abspath 所以在此处加上一个 /
-			absPath = "/" + absPath;
 		}
 
 		return absPath;

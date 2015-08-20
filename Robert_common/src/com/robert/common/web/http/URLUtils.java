@@ -134,7 +134,7 @@ public class URLUtils
 	 *            父链接
 	 * @param subUrl
 	 *            子链接
-	 * @return String 相对路径
+	 * @return String 相对路径 （如果是外链接，或父链接，则返回  unValidLink:链接）
 	 */
 	public static String getPath2SubLink(String rootUrl, String subUrl)
 	{
@@ -160,7 +160,7 @@ public class URLUtils
 		// 外网链接
 		else
 		{
-			return null;
+			return "unValidLink:" + subUrl;
 		}
 
 		if (StringUtils.isEmpty(absPath))

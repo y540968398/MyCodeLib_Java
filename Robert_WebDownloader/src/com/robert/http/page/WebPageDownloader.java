@@ -96,7 +96,8 @@ public class WebPageDownloader
 		else
 		{
 			// 根页面：根路径+根名称+.html
-			pageSavePath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + this.rootDirName +"/" +URLUtils.getFileName(pageUrl) + WebConstants.SURFIX_HTML;
+			pageSavePath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + this.rootDirName + "/"
+			        + URLUtils.getFileName(pageUrl) + WebConstants.SURFIX_HTML;
 		}
 
 		GetDownloader getDownloader = new GetDownloader();
@@ -176,6 +177,7 @@ public class WebPageDownloader
 			}
 			// 下载的相对路径
 			String resSaveRelPath = CfgUtil.get(CfgConstants.DIR_PAGE_DOWNLOAD) + WebConstants.URL_SEPERATOR
+			        + this.rootDirName + WebConstants.URL_SEPERATOR
 			        + DirectoryUtils.getPathWithoutJump(element.attr(linkAttr));
 			// 加入缓存
 			ResourceCache.addResource(resUrl, resSaveRelPath);
@@ -287,10 +289,10 @@ public class WebPageDownloader
 	{
 		String resourcePath = DirectoryUtils.getRelPath(URLUtils.getUrlPath(this.rootUrl), this.pageUrl);
 		this.rsRelPath2root = resourcePath == null ? "" : resourcePath;
-//		if (this.rootUrl.equals(this.pageUrl))
-//		{
-//			this.rsRelPath2root = this.pageUrlName + WebConstants.URL_SEPERATOR;
-//		}
+		// if (this.rootUrl.equals(this.pageUrl))
+		// {
+		// this.rsRelPath2root = this.pageUrlName + WebConstants.URL_SEPERATOR;
+		// }
 	}
 
 	/**

@@ -280,8 +280,9 @@ public class JsoupUtil
 
 			// 解析链接名称 生成子连接相对路径(/子页面目录/子页面名称)
 			String localABSPath = URLUtils.getPath2SubLink(curPageUrl, subLinkUrl);
-			if (null == localABSPath)
+			if (localABSPath.startsWith("unValidLink:"))
 			{
+				element.attr(WebConstants.ATTR_HREF, subLinkUrl);
 				continue;
 			}
 			// 修改并保存连接相对路径：由于页面在下载时，并不知道其后缀名是什么样的有的是静态链接，有的是动态链接，这里统一加.html

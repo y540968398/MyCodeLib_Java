@@ -39,7 +39,6 @@ public class WebSubPageDownloader extends WebPageDownloader
 	public WebSubPageDownloader(String rootUrl, String rootUrlName, String pageUrl, String pageUrlName)
 	{
 		super(rootUrl, rootUrlName, pageUrl, pageUrlName);
-
 	}
 
 	public WebSubPageDownloader(String rootUrl, String rootUrlName, String pageUrl, String pageUrlName,

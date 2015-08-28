@@ -3,9 +3,16 @@ package com.robert.common.file;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+
+import com.robert.common.strings.StringsUtils;
 
 public class FileUtil
 {
@@ -101,5 +108,33 @@ public class FileUtil
 			return true;
 		}
 		return folder.mkdirs();
+	}
+
+	public static List<File> listFiles(String folderPath, String[] fileSurfix) throws IOException
+	{
+		File folder = new File(folderPath);
+		if (!folder.exists() || !folder.isDirectory())
+		{
+			return null;
+		}
+
+		List<File> fileList = new ArrayList<File>();
+		File[] files = folder.listFiles();
+		for (File file : files)
+		{
+			if (file.isFile())
+			{
+				if (StringsUtils.containsAny(file.getName(), fileSurfix))
+				{
+					fileList.add(file);
+				}
+			}
+			else if (file.isDirectory())
+			{
+				fileList.addAll(listFiles(file.getCanonicalPath(), fileSurfix));
+			}
+		}
+
+		return fileList;
 	}
 }

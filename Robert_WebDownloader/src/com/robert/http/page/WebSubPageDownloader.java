@@ -11,6 +11,7 @@ import com.robert.http.constants.WebConstants;
 import com.robert.http.httpclient.IHttpDownloader;
 import com.robert.http.httpclient.thread.WebPageDownloadRunner;
 import com.robert.http.page.cache.PageDownloadCache;
+import com.robert.http.page.filter.LinkFilter;
 import com.robert.http.page.launch.WebDownloaderLaunch;
 import com.robert.http.parse.jsoup.util.JsoupUtil;
 
@@ -63,16 +64,11 @@ public class WebSubPageDownloader extends WebPageDownloader
 	{
 		// 解析链接，并修改连接地址到相对路径
 		List<Element> subLinkList = JsoupUtil.getDownloadSubLinks(document, this.pageUrl);
+		subLinkList = LinkFilter.filterByTextContains(subLinkList);
 		for (Element element : subLinkList)
 		{
 			// 页面原始地址
 			String subPageUrl = element.attr(WebConstants.ATTR_ORIGINAL_URL);
-
-			if (subPageUrl
-			        .startsWith("http://www.drbachinese.org/online_reading_simplified/sutra_explanation/SixthPat/tanjing"))
-			{
-				logger.error("link error !");
-			}
 
 			// 判断页面是否已经下载过
 			if (PageDownloadCache.contains(subPageUrl))

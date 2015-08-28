@@ -67,7 +67,7 @@ public class StringsUtilsT
 		int idx = StringsUtils.indexOfLevel(url, "/", 3);
 		Assert.assertEquals(url.lastIndexOf("/"), idx);
 	}
-	
+
 	@Test
 	public void indexOfLevel_test8_lastIndex()
 	{
@@ -82,6 +82,76 @@ public class StringsUtilsT
 		String url = "http://www.sina.com.cn/";
 		int idx = StringsUtils.indexOfLevel(url, "/", 1);
 		Assert.assertEquals(url.indexOf("/"), idx);
+	}
+
+	@Test
+	public void constains_test1_all()
+	{
+		String text = "全部包含即可;测试;理论;天;地;人;";
+		String[] searchFor = new String[] { "包含", "测试", "理论" };
+		boolean rs = StringsUtils.constains(text, searchFor, true);
+
+		Assert.assertTrue(rs);
+	}
+
+	@Test
+	public void constains_test2_all()
+	{
+		String text = "全部包含即可;测试;理论;天;地;人;";
+		String[] searchFor = new String[] { "包含", "测试", "理论", "a" };
+		boolean rs = StringsUtils.constains(text, searchFor, true);
+
+		Assert.assertFalse(rs);
+	}
+
+	@Test
+	public void constains_test3_all()
+	{
+		String text = "全部包含即可;测试;理论;天;地;人;a";
+		String[] searchFor = new String[] { "包含", "测试", "理论", "a" };
+		boolean rs = StringsUtils.constains(text, searchFor, true);
+
+		Assert.assertTrue(rs);
+	}
+
+	@Test
+	public void constains_test4_all()
+	{
+		String text = "全部包含即可;测试;理论;天;地;人;a";
+		String[] searchFor = new String[] { "ee", "c试", "d论", "d" };
+		boolean rs = StringsUtils.constains(text, searchFor, true);
+
+		Assert.assertFalse(rs);
+	}
+
+	@Test
+	public void constains_test1_or()
+	{
+		String text = "包含一个即可;测试;理论;天;地;人;a";
+		String[] searchFor = new String[] { "包含", "ssss" };
+		boolean rs = StringsUtils.constains(text, searchFor, false);
+
+		Assert.assertTrue(rs);
+	}
+
+	@Test
+	public void constains_test2_or()
+	{
+		String text = "包含一个即可;测试;理论;天;地;人;ssss";
+		String[] searchFor = new String[] { "a含", "ssss" };
+		boolean rs = StringsUtils.constains(text, searchFor, false);
+
+		Assert.assertTrue(rs);
+	}
+
+	@Test
+	public void constains_test3_or()
+	{
+		String text = "包含一个即可;测试;理论;天;地;人;ssss";
+		String[] searchFor = new String[] { "eeee", "dddd" };
+		boolean rs = StringsUtils.constains(text, searchFor, false);
+
+		Assert.assertFalse(rs);
 	}
 
 }

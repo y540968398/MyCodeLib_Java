@@ -32,4 +32,88 @@ public class StringsUtils
 		return idx;
 	}
 
+	/**
+	 * 字符串包含指定的多个字符
+	 * 
+	 * @param string
+	 *            字符串
+	 * @param searchFor
+	 *            指定的多个字符串
+	 * @return true:都包含
+	 */
+	public static boolean containsAll(String string, String[] searchFor)
+	{
+		boolean isContainsAll = true;
+		for (String search : searchFor)
+		{
+			if (!string.contains(search))
+			{
+				isContainsAll = false;
+				break;
+			}
+		}
+		return isContainsAll;
+	}
+
+	/**
+	 * 字符串包含指定的任一字符串
+	 * 
+	 * @param string
+	 *            字符串
+	 * @param searchFor
+	 *            指定的多个字符串
+	 * @return true:包含任一字符串即可
+	 */
+	public static boolean containsAny(String string, String[] searchFor)
+	{
+
+		boolean isContainsAny = false;
+		for (String search : searchFor)
+		{
+			if (string.contains(search))
+			{
+				isContainsAny = true;
+				break;
+			}
+		}
+		return isContainsAny;
+	}
+
+	/**
+	 * 判断字符串 是否包含 指定多个字符
+	 * 
+	 * @param string
+	 *            字符串
+	 * @param searchFor
+	 *            指定的多个字符串
+	 * @param isAll
+	 *            true:全部包含 false:包含任一
+	 * @return true:全匹配模式下，字符串必须包含所有指定的字符 <br/>
+	 *         true:任一匹配模式下，字符串包含任一指定的字符串即可
+	 */
+	public static boolean constains(String string, String[] searchFor, boolean isAll)
+	{
+		boolean isContainsAny = isAll;
+		for (String search : searchFor)
+		{
+			if (!isAll)
+			{
+				if (string.contains(search))
+				{
+					isContainsAny = !isAll;
+					break;
+				}
+			}
+			else
+			{
+				if (!string.contains(search))
+				{
+					isContainsAny = !isAll;
+					break;
+				}
+			}
+		}
+		return isContainsAny;
+	}
+
 }

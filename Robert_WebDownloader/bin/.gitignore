@@ -1,1 +1,4 @@
 /com/
+/log4j.properties
+/mapConfig.properties
+/sysConfig.properties

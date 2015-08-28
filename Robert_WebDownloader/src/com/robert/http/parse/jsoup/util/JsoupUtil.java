@@ -23,6 +23,7 @@ import com.robert.common.cfglog.CfgUtil;
 import com.robert.common.file.FileUtil;
 import com.robert.common.web.http.URLUtils;
 import com.robert.http.constants.WebConstants;
+import com.robert.http.page.filter.LinkFilter;
 
 public class JsoupUtil
 {
@@ -263,6 +264,10 @@ public class JsoupUtil
 		{
 			// 链接地址
 			String linkUrl = element.attr(WebConstants.ATTR_HREF);
+			
+			if (linkUrl.startsWith("file:///C:")){
+				linkUrl = linkUrl.substring("file:///C:".length());
+			}
 			
 			// 解析链接为合法地址(非相对地址)
 			String subLinkUrl = URLUtils.getSubLinkURL(curPageUrl, linkUrl);
